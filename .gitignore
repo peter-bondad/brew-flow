@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# drizzle generated files
+/drizzle
+
 # production
 /build
 
