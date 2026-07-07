@@ -26,7 +26,9 @@ export function AuthHero() {
         </p>
         <div className="relative mt-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-lg font-semibold sm:text-xl">Hazelnut Velvet Latte</p>
+            <p className="text-lg font-semibold sm:text-xl">
+              Hazelnut Velvet Latte
+            </p>
             <p className="mt-1 text-[0.85rem] leading-snug text-[#f3e1c6] sm:text-sm">
               Warm espresso, silky foam, toasted hazelnut
             </p>
