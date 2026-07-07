@@ -60,16 +60,6 @@ export function LoginForm() {
             Sign in
           </button>
         </form>
-
-        <div className="mt-6 flex items-center justify-center text-sm text-[#7b5f46]">
-          <span>New here?</span>
-          <a
-            href="#"
-            className="ml-2 cursor-pointer font-semibold text-[#8d5a2b] transition hover:text-[#6f3e1d]"
-          >
-            Create an account
-          </a>
-        </div>
       </div>
     </section>
   );
