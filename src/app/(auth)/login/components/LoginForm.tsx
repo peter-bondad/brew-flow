@@ -43,6 +43,13 @@ export function LoginForm() {
         toast.error(error.message ?? "Login failed. Please Try Again.");
         return;
       }
+      const { data: session } = await authClient.getSession();
+
+      if (session?.user.role === "admin") {
+        router.replace("/admin");
+      } else {
+        router.replace("/dashboard");
+      }
 
       toast.success("Welcome back!");
 
