@@ -21,7 +21,6 @@ export default async function NewAdminUserPage() {
     },
   });
 
-  console.log("Role check: ", roleCheck);
   const canCreateInvite = await auth.api.userHasPermission({
     body: {
       userId: session.user.id,
@@ -30,8 +29,6 @@ export default async function NewAdminUserPage() {
       },
     },
   });
-
-  console.log(canCreateInvite);
 
   if (!canCreateInvite.success) {
     return (
