@@ -2,11 +2,11 @@ import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { requireAdmin } from "@/server/features/admin/admin.middleware";
 import { createInvitationHandler } from "@/server/features/admin/admin.controller";
 import { acceptInvitationHandler } from "@/server/features/invitations/invitation.controller";
 import { Env } from "./types/hono-types";
 import { requirePermission } from "./middleware/require-permissions";
+import { requireAdmin } from "./middleware/admin.middleware";
 
 const app = new Hono<Env>()
 
@@ -33,6 +33,7 @@ const app = new Hono<Env>()
     requirePermission({ invitation: ["create"] }),
     createInvitationHandler,
   )
+  .post("/api/invitations/accept", acceptInvitationHandler)
 
   .get("/api/hello", (c) => {
     return c.json({
