@@ -5,6 +5,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import db from "@/server/infra/database/client";
 import { ac, user, admin as adminPlugin } from "./permissions";
 import { admin } from "better-auth/plugins";
+import * as schema from "@/server/infra/database/schemas/index";
 
 export const auth = betterAuth({
   secret: env.NEXTAUTH_SECRET,
@@ -14,6 +15,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg", // Specify the database provider (e.g., "pg" for PostgreSQL)
     usePlural: true, // Use plural table names (e.g., "users" instead of "user")
+    schema,
   }),
   emailAndPassword: {
     minPasswordLength: 8,
