@@ -32,7 +32,7 @@ export const auth = betterAuth({
       ac,
       roles: {
         user,
-        adminPlugin,
+        admin: adminPlugin,
       },
     }),
   ],
