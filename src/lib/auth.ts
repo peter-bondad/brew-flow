@@ -11,6 +11,29 @@ export const auth = betterAuth({
   secret: env.NEXTAUTH_SECRET,
   appName: env.NEXT_PUBLIC_APP_NAME,
   appUrl: env.NEXTAUTH_URL,
+  rateLimit: {
+    enabled: true,
+    window: 60, // 1 minute
+    max: 100,
+    storage: "database",
+
+    customRules: {
+      "/sign-in/email": {
+        window: 60,
+        max: 5,
+      },
+
+      "/sign-up/email": {
+        window: 60,
+        max: 3,
+      },
+
+      "/forget-password": {
+        window: 300, // 5 minutes
+        max: 3,
+      },
+    },
+  },
 
   database: drizzleAdapter(db, {
     provider: "pg", // Specify the database provider (e.g., "pg" for PostgreSQL)
@@ -27,6 +50,7 @@ export const auth = betterAuth({
       verify: verifyHashedPassword,
     },
   },
+
   plugins: [
     admin({
       ac,
