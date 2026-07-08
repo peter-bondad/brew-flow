@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,12 +15,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Coffee House",
-  description:
-    "A cozy modern coffee experience for sign in, sign up, and warm favorites.",
+  description: "...",
   icons: {
     icon: "/coffee-bean-logo.svg",
     apple: "/coffee-bean-logo.svg",
   },
+  themeColor: "#e8c79d",
 };
 
 export default function RootLayout({
@@ -38,7 +39,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/coffee-bean-logo-no-bg.svg" />
         <meta name="theme-color" content="#e8c79d" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Toaster position="bottom-right" closeButton={true} duration={3000} />
+      </body>
     </html>
   );
 }
