@@ -38,6 +38,7 @@ export function LoginForm() {
       });
 
       if (error) {
+        console.dir("Login error:", error);
         setError(error.message ?? "Login failed. Please Try Again.");
         toast.error(error.message ?? "Login failed. Please Try Again.");
         return;
