@@ -2,11 +2,8 @@ import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { createInvitationHandler } from "@/server/features/admin/admin.controller";
-import { acceptInvitationHandler } from "@/server/features/invitations/invitation.controller";
 import { Env } from "./types/hono-types";
-import { requirePermission } from "./middleware/require-permissions";
-import { requireAdmin } from "./middleware/admin.middleware";
+import { requireAuth } from "./middleware/require-auth";
 
 const app = new Hono<Env>()
 
@@ -27,13 +24,7 @@ const app = new Hono<Env>()
   })
 
   // admin routes
-  .use("/api/admin/*", requireAdmin)
-  .post(
-    "/api/admin/invitations",
-    requirePermission({ invitation: ["create"] }),
-    createInvitationHandler,
-  )
-  .post("/api/invitations/accept", acceptInvitationHandler)
+  .use("/api/admin/*", requireAuth)
 
   .get("/api/hello", (c) => {
     return c.json({
