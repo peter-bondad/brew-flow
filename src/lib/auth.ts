@@ -3,6 +3,7 @@ import { env } from "./env";
 import { hashPassword } from "@/utils/password-hashing";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import db from "@/server/infra/database/client";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   secret: env.NEXTAUTH_SECRET,
@@ -22,5 +23,5 @@ export const auth = betterAuth({
       hash: hashPassword,
     },
   },
-  plugins: [],
+  plugins: [admin()],
 });
