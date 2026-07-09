@@ -11,7 +11,7 @@ export type PermissionAction<T extends Resource> =
   (typeof statement)[T][number];
 
 export type Permission = {
-  [K in Resource]: PermissionAction<K>[];
+  [K in Resource]?: PermissionAction<K>[]; // each route only cares about the permission it needs.
 };
 
 export const ac = createAccessControl(statement);
