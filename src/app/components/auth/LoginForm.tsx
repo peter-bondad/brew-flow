@@ -46,14 +46,14 @@ export function LoginForm() {
       const { data: session } = await authClient.getSession();
 
       if (session?.user.role === "admin") {
-        router.replace("/admin");
+        router.replace("/admin/menu");
       } else {
-        router.replace("/dashboard");
+        router.replace("/login");
       }
 
       toast.success("Welcome back!");
 
-      router.replace("/dashboard");
+      router.replace("/admin/menu");
       router.refresh();
     } catch {
       toast.error("Something went wrong.");
