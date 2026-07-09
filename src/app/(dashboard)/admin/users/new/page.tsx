@@ -1,7 +1,7 @@
+import { InviteUserForm } from "@/app/components/admin/InviteUserForm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { InviteUserForm } from "./components/InviteUserForm";
 
 export default async function NewAdminUserPage() {
   const session = await auth.api.getSession({
@@ -11,15 +11,6 @@ export default async function NewAdminUserPage() {
   if (!session) {
     redirect("/login");
   }
-
-  const roleCheck = await auth.api.userHasPermission({
-    body: {
-      role: "admin",
-      permissions: {
-        invitation: ["create"],
-      },
-    },
-  });
 
   const canCreateInvite = await auth.api.userHasPermission({
     body: {
