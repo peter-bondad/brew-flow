@@ -1,0 +1,68 @@
+import { UserRole } from "@/server/types/user-role.types";
+import { InvitationStatus } from "./invitation.constant";
+
+export interface CreateInvitation {
+  email: string;
+  name?: string | null;
+  role: UserRole;
+  tokenHash: string;
+  expiresAt: Date;
+  createdBy: string;
+}
+
+export interface PendingInvitation {
+  id: string;
+  email: string;
+  expiresAt: Date;
+}
+
+export interface InvitationForAcceptance {
+  id: string;
+  email: string;
+  name: string | null;
+  role: UserRole;
+  status: InvitationStatus;
+  expiresAt: Date;
+}
+
+export interface MarkInvitationAccepted {
+  invitationId: string;
+  userId: string;
+}
+
+export interface InvitationIRepository {
+  create(data: CreateInvitation): Promise<void>;
+
+  getPendingByEmail(email: string): Promise<PendingInvitation | undefined>;
+
+  getForAcceptance(
+    tokenHash: string,
+  ): Promise<InvitationForAcceptance | undefined>;
+
+  markAccepted(data: MarkInvitationAccepted): Promise<void>;
+
+  revoke(invitationId: string): Promise<void>;
+
+  expire(invitationId: string): Promise<void>;
+}
+
+// Service layer argument types
+export interface CreateInvitationInput {
+  email: string;
+  name?: string;
+  role: UserRole;
+}
+
+export interface CreateInvitationResult {
+  token: string;
+  invitationUrl: string;
+  expiresAt: Date;
+}
+
+export interface AcceptInvitationInput {
+  token: string;
+}
+
+export interface RevokeInvitationInput {
+  invitationId: string;
+}
