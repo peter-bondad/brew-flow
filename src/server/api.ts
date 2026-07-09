@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Env } from "./hono/hono-types";
 import { requireAuth } from "./middleware/require-auth";
+import invitationRoutes from "./features/invitation/invitation.routes";
 
 const app = new Hono<Env>()
 
@@ -25,6 +26,8 @@ const app = new Hono<Env>()
 
   // admin routes
   .use("/api/admin/*", requireAuth)
+  // user invitation routes (admin routes)
+  .route("/invitation", invitationRoutes)
 
   .get("/api/hello", (c) => {
     return c.json({
