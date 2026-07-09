@@ -1,7 +1,7 @@
-import { relations } from "drizzle-orm/_relations";
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./auth-schema";
 import { invitationStatusEnum, userRoleEnum } from "./schema-pg.enum";
+import { relations } from "drizzle-orm";
 
 export const invitations = pgTable(
   "invitations",
