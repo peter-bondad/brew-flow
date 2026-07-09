@@ -11,9 +11,11 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
 
-      <SidebarInset>
+      <SidebarInset className="h-screen overflow-hidden">
         <DashboardHeader />
-        <main className="min-h-screen bg-[#fffaf5] p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-[#fffaf5] px-8 py-6">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

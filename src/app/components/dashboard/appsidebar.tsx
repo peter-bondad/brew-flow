@@ -1,3 +1,6 @@
+"use client";
+import { usePathname } from "next/navigation";
+
 import {
   Coffee,
   LayoutDashboard,
@@ -7,13 +10,11 @@ import {
   Package,
   ShoppingBag,
   BarChart3,
-  Settings,
 } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -27,28 +28,18 @@ import Link from "next/link";
 
 const navigation = [
   {
-    title: "Dashboard",
+    title: "Overview",
     items: [
       {
-        title: "Overview",
+        title: "Dashboard",
         href: "/admin",
         icon: LayoutDashboard,
       },
     ],
   },
   {
-    title: "Management",
+    title: "Operations",
     items: [
-      {
-        title: "Invitations",
-        href: "/admin/invitations",
-        icon: MailPlus,
-      },
-      {
-        title: "Users",
-        href: "/admin/users",
-        icon: Users,
-      },
       {
         title: "Menu",
         href: "/admin/menu",
@@ -59,16 +50,31 @@ const navigation = [
         href: "/admin/inventory",
         icon: Package,
       },
-    ],
-  },
-  {
-    title: "Sales",
-    items: [
       {
         title: "Orders",
         href: "/admin/orders",
         icon: ShoppingBag,
       },
+    ],
+  },
+  {
+    title: "Staff",
+    items: [
+      {
+        title: "Users",
+        href: "/admin/users",
+        icon: Users,
+      },
+      {
+        title: "Invitations",
+        href: "/admin/invitations",
+        icon: MailPlus,
+      },
+    ],
+  },
+  {
+    title: "Analytics",
+    items: [
       {
         title: "Reports",
         href: "/admin/reports",
@@ -79,6 +85,7 @@ const navigation = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -94,7 +101,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="px-2">
         {navigation.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel className="text-[#8d5a2b]">
@@ -105,7 +112,14 @@ export function AppSidebar() {
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton render={<Link href={item.href} />}>
+                    <SidebarMenuButton
+                      render={<Link href={item.href} />}
+                      isActive={
+                        pathname === item.href ||
+                        (item.href !== "/admin" &&
+                          pathname.startsWith(item.href))
+                      }
+                    >
                       <item.icon />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
@@ -116,17 +130,6 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
-
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton render={<Link href="/dashboard/settings" />}>
-              <Settings />
-              <span>Settings</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -1,8 +1,12 @@
 import { InviteUserForm } from "@/app/components/admin/InviteUserForm";
 import { Card, CardContent } from "@/components/ui/card";
+import { requirePermission } from "@/lib/auth-guard";
 import { MailPlus } from "lucide-react";
 
-export default function InvitationsPage() {
+export default async function InvitationsPage() {
+  await requirePermission({
+    invitation: ["create"],
+  });
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <section className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fff9f2] shadow-lg">
