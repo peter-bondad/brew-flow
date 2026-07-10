@@ -6,6 +6,12 @@ export class InvitationAlreadyExistsError extends ApplicationError {
   }
 }
 
+export class InvitationAlreadyAcceptedError extends ApplicationError {
+  constructor(message = "Invitation has already been accepted.") {
+    super(message, "INVITATION_ALREADY_ACCEPTED");
+  }
+}
+
 export class InvitationExpiredError extends ApplicationError {
   constructor(message = "Invitation has expired.") {
     super(message, "INVITATION_EXPIRED");
