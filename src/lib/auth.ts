@@ -39,7 +39,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     minPasswordLength: 8,
     maxPasswordLength: 128,
-    requireEmailVerification: true,
+    requireEmailVerification: false,
     enabled: true,
     password: {
       hash: hashPassword,
