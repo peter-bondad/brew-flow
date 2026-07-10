@@ -22,6 +22,7 @@ export interface InvitationForAcceptance {
   name: string | null;
   role: UserRole;
   status: InvitationStatus;
+  acceptedAt: Date;
   expiresAt: Date;
 }
 
