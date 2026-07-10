@@ -52,9 +52,6 @@ export function LoginForm() {
       }
 
       toast.success("Welcome back!");
-
-      router.replace("/admin");
-      router.refresh();
     } catch {
       toast.error("Something went wrong.");
     } finally {
