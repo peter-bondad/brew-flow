@@ -27,12 +27,6 @@ const app = new Hono<Env>()
   // admin routes
   .use("/api/admin/*", requireAuth)
   // user invitation routes (admin routes)
-  .route("/invitation", invitationRoutes)
-
-  .get("/api/hello", (c) => {
-    return c.json({
-      message: "Hello, World!",
-    });
-  });
+  .route("/api/admin/invitations", invitationRoutes);
 
 export default app;
