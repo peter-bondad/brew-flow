@@ -7,6 +7,7 @@ import { InvitationRepository } from "../features/invitation/invitation.reposito
 import { InvitationService } from "../features/invitation/invitation.service";
 import db from "../infra/database/client";
 import { resend } from "../email/resend";
+import { UserRepository } from "../features/user/user.repository";
 
 // email service
 const emailService =
@@ -14,9 +15,11 @@ const emailService =
     ? new DevelopmentEmailService()
     : new ResendEmailService(resend);
 
+const userRepository = new UserRepository(db);
 const invitationRepository = new InvitationRepository(db);
 
 const invitationService = new InvitationService(
+  userRepository,
   invitationRepository,
   emailService,
 );
