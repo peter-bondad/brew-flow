@@ -56,13 +56,13 @@ export class InvitationRepository implements IInvitationRepository {
 
   async markAccepted({
     invitationId,
-    adminUserId,
+    usedBy,
   }: MarkInvitationAccepted): Promise<void> {
     await this.database
       .update(invitations)
       .set({
         status: invitationStatus.Accepted,
-        createdBy: adminUserId,
+        usedBy,
         acceptedAt: new Date(),
       })
       .where(eq(invitations.id, invitationId));

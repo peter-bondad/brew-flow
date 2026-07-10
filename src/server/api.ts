@@ -4,7 +4,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Env } from "./hono/hono-types";
 import { requireAuth } from "./middleware/require-auth";
-import invitationRoutes from "./features/invitation/invitation.routes";
+import adminInvitationRoutes from "./features/invitation/admin.routes";
+import publicInvitationRoutes from "./features/invitation/public.routes";
 
 const app = new Hono<Env>()
 
@@ -24,9 +25,10 @@ const app = new Hono<Env>()
     return auth.handler(c.req.raw);
   })
 
+  .route("/api/invitation", publicInvitationRoutes)
   // admin routes
   .use("/api/admin/*", requireAuth)
   // user invitation routes (admin routes)
-  .route("/api/admin/invitations", invitationRoutes);
+  .route("/api/admin/invitations", adminInvitationRoutes);
 
 export default app;

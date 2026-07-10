@@ -22,9 +22,5 @@ export function createInvitationExpiry(): Date {
 }
 
 export function createInvitationUrl(token: string): string {
-  const url = new URL("/invite/accept", env.NEXT_PUBLIC_APP_URL);
-
-  url.searchParams.set("token", token);
-
-  return url.toString();
+  return new URL(`/invite/${token}`, env.NEXT_PUBLIC_APP_URL).toString();
 }

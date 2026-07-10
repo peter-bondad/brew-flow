@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { factory } from "@/server/hono/hono-factory";
 
-import { createInvitationDto } from "./invitation.dto";
+import { acceptInvitationDto, createInvitationDto } from "./invitation.dto";
 import { container } from "@/server/container";
 
 export const createInvitationController = factory.createHandlers(
@@ -27,6 +27,26 @@ export const createInvitationController = factory.createHandlers(
       {
         message: "Invitation created successfully",
         data: result,
+      },
+      201,
+    );
+  },
+);
+
+export const acceptInvitationController = factory.createHandlers(
+  zValidator("json", acceptInvitationDto),
+  async (c) => {
+    const { name, password, token } = c.req.valid("json");
+
+    await container.invitationService.acceptInvitation({
+      name,
+      password,
+      token,
+    });
+
+    return c.json(
+      {
+        message: "Account created successfully.",
       },
       201,
     );

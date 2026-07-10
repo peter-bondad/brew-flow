@@ -28,7 +28,7 @@ export interface InvitationForAcceptance {
 
 export interface MarkInvitationAccepted {
   invitationId: string;
-  adminUserId: string;
+  usedBy: string;
 }
 
 export interface IInvitationRepository {
@@ -62,10 +62,15 @@ export interface CreateInvitationResult {
 
 export interface AcceptInvitationInput {
   token: string;
-  email: string;
   name: string;
   password: string;
 }
+
+export type InvitationDisplayResult =
+  | { status: "not_found" }
+  | { status: "expired" }
+  | { status: "already_accepted" }
+  | { status: "valid"; invitation: { email: string; name: string } };
 
 export interface RevokeInvitationInput {
   invitationId: string;
