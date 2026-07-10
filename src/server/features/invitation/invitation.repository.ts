@@ -22,7 +22,7 @@ export class InvitationRepository implements IInvitationRepository {
     });
   }
 
-  async getPendingByEmail(
+  async findPendingByEmail(
     email: string,
   ): Promise<PendingInvitation | undefined> {
     return this.database.query.invitations.findFirst({
@@ -38,7 +38,7 @@ export class InvitationRepository implements IInvitationRepository {
     }) as Promise<PendingInvitation | undefined>;
   }
 
-  async getForAcceptance(
+  async findForAcceptance(
     tokenHash: string,
   ): Promise<InvitationForAcceptance | undefined> {
     return this.database.query.invitations.findFirst({

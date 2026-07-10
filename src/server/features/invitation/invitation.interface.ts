@@ -34,9 +34,9 @@ export interface MarkInvitationAccepted {
 export interface IInvitationRepository {
   create(data: CreateInvitation): Promise<void>;
 
-  getPendingByEmail(email: string): Promise<PendingInvitation | undefined>;
+  findPendingByEmail(email: string): Promise<PendingInvitation | undefined>;
 
-  getForAcceptance(
+  findForAcceptance(
     tokenHash: string,
   ): Promise<InvitationForAcceptance | undefined>;
 
