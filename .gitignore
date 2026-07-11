@@ -33,8 +33,11 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Environment files
 .env*
+
+# Keep the environment template under version control
+!.env.example
 
 # vercel
 .vercel
