@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Coffee, CupSoda, Search, Plus, Star, DollarSign } from "lucide-react";
+import { Coffee, CupSoda, Search, Plus, Star } from "lucide-react";
 
 const menuItems = [
   {
