@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import authClient from "@/lib/auth-client";
+import { env } from "@/lib/env";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useId, useState } from "react";
@@ -38,7 +39,7 @@ export function LoginForm() {
       });
 
       if (error) {
-        if (process.env.NODE_ENV === "development") {
+        if (env.NODE_ENV === "development") {
           console.dir(error);
         }
         setError(error.message ?? "Login failed. Please try again.");
