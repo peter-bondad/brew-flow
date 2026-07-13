@@ -8,6 +8,7 @@ import { admin } from "better-auth/plugins";
 import * as schema from "@/server/infra/database/schemas/index";
 
 export const auth = betterAuth({
+  baseURL: env.NEXT_PUBLIC_APP_URL,
   secret: env.BETTER_AUTH_SECRET,
   appName: env.NEXT_PUBLIC_APP_NAME,
   appUrl: env.NEXT_PUBLIC_APP_URL,
