@@ -43,6 +43,7 @@ export interface IInvitationRepository {
   markAccepted(data: MarkInvitationAccepted): Promise<void>;
 
   revoke(invitationId: string): Promise<void>;
+  expireExpiredInvitations(): Promise<number>;
 }
 
 // Service layer argument types

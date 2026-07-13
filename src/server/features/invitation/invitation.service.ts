@@ -146,4 +146,8 @@ export class InvitationService {
       },
     };
   }
+
+  async expireInvitations(): Promise<number> {
+    return await this.invitationIRepository.expireExpiredInvitations();
+  }
 }

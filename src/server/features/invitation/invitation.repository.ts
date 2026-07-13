@@ -1,4 +1,4 @@
-import { and, eq, gt } from "drizzle-orm";
+import { and, eq, gt, lte } from "drizzle-orm";
 
 import db from "@/server/infra/database/client";
 import { invitations } from "@/server/infra/database/schemas";
@@ -82,5 +82,24 @@ export class InvitationRepository implements IInvitationRepository {
         status: "revoked",
       })
       .where(eq(invitations.id, invitationId));
+  }
+
+  async expireExpiredInvitations(): Promise<number> {
+    const result = await this.database
+      .update(invitations)
+      .set({
+        status: invitationStatus.Expired,
+      })
+      .where(
+        and(
+          eq(invitations.status, invitationStatus.Pending),
+          lte(invitations.expiresAt, new Date()),
+        ),
+      )
+      .returning({
+        id: invitations.id,
+      });
+
+    return result.length;
   }
 }
