@@ -18,7 +18,7 @@ export class InvitationRepository implements IInvitationRepository {
   async create(data: CreateInvitation): Promise<void> {
     await this.database.insert(invitations).values({
       ...data,
-      status: invitationStatus.Expired,
+      status: invitationStatus.Pending,
     });
   }
 
