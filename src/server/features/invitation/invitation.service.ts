@@ -147,6 +147,7 @@ export class InvitationService {
     };
   }
 
+  // For Vercel Cron Controller
   async expireInvitations(): Promise<number> {
     return await this.invitationIRepository.expireExpiredInvitations();
   }
