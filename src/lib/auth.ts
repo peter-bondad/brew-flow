@@ -54,6 +54,14 @@ export const auth = betterAuth({
       hash: hashPassword,
       verify: verifyHashedPassword,
     },
+    sendResetPassword: async ({ user, url }) => {
+      await container.emailService.sendPasswordReset({
+        email: user.email,
+        resetUrl: url,
+      });
+    },
+    resetPasswordTokenExpiresIn: 60 * 60,
+    revokeSessionsOnPasswordReset: true,
   },
 
   plugins: [
