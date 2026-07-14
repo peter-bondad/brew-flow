@@ -1,16 +1,13 @@
 "use client";
+
+import Link from "next/link";
+import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 
-import {
-  Coffee,
-  LayoutDashboard,
-  MailPlus,
-  Users,
-  CupSoda,
-  Package,
-  ShoppingBag,
-  BarChart3,
-} from "lucide-react";
+import { Coffee } from "lucide-react";
+
+import { useSession } from "@/components/providers/session-provider";
+import { navigation } from "../config/navigation";
 
 import {
   Sidebar,
@@ -24,68 +21,26 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import Link from "next/link";
-
-const navigation = [
-  {
-    title: "Overview",
-    items: [
-      {
-        title: "Dashboard",
-        href: "/admin",
-        icon: LayoutDashboard,
-      },
-    ],
-  },
-  {
-    title: "Operations",
-    items: [
-      {
-        title: "Menu",
-        href: "/admin/menu",
-        icon: CupSoda,
-      },
-      {
-        title: "Inventory",
-        href: "/admin/inventory",
-        icon: Package,
-      },
-      {
-        title: "Orders",
-        href: "/admin/orders",
-        icon: ShoppingBag,
-      },
-    ],
-  },
-  {
-    title: "Staff",
-    items: [
-      {
-        title: "Users",
-        href: "/admin/users",
-        icon: Users,
-      },
-      {
-        title: "Invitations",
-        href: "/admin/invitations",
-        icon: MailPlus,
-      },
-    ],
-  },
-  {
-    title: "Analytics",
-    items: [
-      {
-        title: "Reports",
-        href: "/admin/reports",
-        icon: BarChart3,
-      },
-    ],
-  },
-];
-
 export function AppSidebar() {
   const pathname = usePathname();
+
+  const { hasPermission } = useSession();
+
+  const visibleNavigation = useMemo(() => {
+    return navigation
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => {
+          if (!item.permission) {
+            return true;
+          }
+
+          return hasPermission(item.permission);
+        }),
+      }))
+      .filter((group) => group.items.length > 0);
+  }, [hasPermission]);
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -96,13 +51,14 @@ export function AppSidebar() {
 
           <div>
             <h1 className="font-semibold text-[#3d2413]">BrewFlow</h1>
+
             <p className="text-xs text-[#7b5f46]">Admin Panel</p>
           </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent className="px-2">
-        {navigation.map((group) => (
+        {visibleNavigation.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel className="text-[#8d5a2b]">
               {group.title}
