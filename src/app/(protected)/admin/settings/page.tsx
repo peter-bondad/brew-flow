@@ -1,9 +1,6 @@
-import { getSession } from "@/server/auth/get-session";
 import { SettingsTabs } from "./components/settings-tab";
 
-export default async function SettingsPage() {
-  const session = await getSession();
-
+export default function SettingsPage() {
   return (
     <main
       className="
@@ -17,23 +14,9 @@ export default async function SettingsPage() {
     >
       <div className="mx-auto max-w-5xl space-y-6">
         <div>
-          <h1
-            className="
-              text-3xl
-              font-semibold
-              text-[#4a2c1a]
-            "
-          >
-            Settings
-          </h1>
+          <h1 className="text-3xl font-semibold text-[#4a2c1a]">Settings</h1>
 
-          <p
-            className="
-              text-sm
-              text-[#8b5e34]
-              mt-2
-            "
-          >
+          <p className="mt-2 text-sm text-[#8b5e34]">
             Manage your account and BrewFlow preferences.
           </p>
         </div>
