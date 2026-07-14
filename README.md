@@ -1,6 +1,8 @@
-![BrewFlow Logo](public/coffee-logo.svg)
+<p align="center">
+  <img src="public/coffee-logo.svg" width="120" alt="BrewFlow Logo">
+</p>
 
-# BrewFlow
+<h1 align="center">BrewFlow</h1>
 
 > A Coffee Shop Management Platform built with **Next.js**, **Hono**, **Better Auth**, **Drizzle ORM**, and **PostgreSQL**.
 
