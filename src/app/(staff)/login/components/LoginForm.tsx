@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import authClient from "@/lib/auth-client";
 import { env } from "@/lib/env";
+import { UserRole, userRole } from "@/server/shared/user-role.types";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -49,18 +50,18 @@ export function LoginForm() {
 
       if (!data) {
         toast.error("Unable to complete sign in.");
+        return;
+      }
 
+      const allowedRoles = [userRole.Owner, userRole.Manager, userRole.Staff];
+
+      if (!allowedRoles.includes(data.user.role as UserRole)) {
+        toast.error("You are not authorized to access this application.");
         return;
       }
 
       toast.success("Welcome back to BrewFlow!");
-      switch (data.user.role) {
-        case "admin":
-          router.replace("/admin");
-          break;
-        default:
-          toast.error("You are not authorized to access this application.");
-      }
+      router.replace("/admin");
     } catch {
       toast.error("Something went wrong.");
     } finally {
