@@ -1,4 +1,6 @@
-# ☕ BrewFlow
+![BrewFlow Logo](public/coffee-logo.svg)
+
+# BrewFlow
 
 > A Coffee Shop Management Platform built with **Next.js**, **Hono**, **Better Auth**, **Drizzle ORM**, and **PostgreSQL**.
 
