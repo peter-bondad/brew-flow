@@ -1,3 +1,4 @@
+"use client";
 import { useSession } from "@/components/providers/session-provider";
 import { UserNav } from "./user-nav";
 
