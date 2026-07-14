@@ -57,8 +57,8 @@ export function ForgotPasswordForm() {
 
         <p className="mt-4 text-sm leading-7 text-[#7b5f46]">
           If an account exists for
-          <span className="font-medium text-[#5d4033]"> {email}</span>, we've
-          sent a password reset link.
+          <span className="font-medium text-[#5d4033]"> {email}</span>,
+          we&apos;ve sent a password reset link.
         </p>
 
         <p className="mt-2 text-sm text-[#8d725d]">
@@ -66,7 +66,7 @@ export function ForgotPasswordForm() {
         </p>
 
         <p className="mt-6 text-sm text-[#8d725d]">
-          Didn't receive it? Check your spam folder or try again later.
+          Didn&apos;t receive it? Check your spam folder or try again later.
         </p>
 
         <Link href="/login" className="mt-8 h-12 rounded-full px-6"></Link>
@@ -86,7 +86,7 @@ export function ForgotPasswordForm() {
         </h2>
 
         <p className="mt-3 text-sm leading-7 text-[#7b5f46]">
-          Enter the email associated with your account and we'll send you a
+          Enter the email associated with your account and we&apos;ll send you a
           secure password reset link.
         </p>
       </div>

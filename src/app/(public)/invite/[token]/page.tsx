@@ -58,7 +58,7 @@ export default async function AcceptInvitationPage({
                 />
 
                 <p className="text-sm text-[#f5e7d8]">
-                  Welcome aboard. Let's brew something great together.
+                  Welcome aboard. Let&apos;s brew something great together.
                 </p>
               </div>
             </div>

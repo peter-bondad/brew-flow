@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
               </h1>
 
               <p className="mt-5 max-w-md text-[15px] leading-7 text-[#f6eadf]">
-                Enter your email and we'll send you a secure password reset
+                Enter your email and we&apos;ll send you a secure password reset
                 link.
               </p>
             </div>
@@ -36,8 +36,8 @@ export default function ForgotPasswordPage() {
                 />
 
                 <p className="text-sm text-[#f5e7d8]">
-                  Every great brew starts fresh. We'll help you get back into
-                  your account.
+                  Every great brew starts fresh. We&apos;ll help you get back
+                  into your account.
                 </p>
               </div>
             </div>
