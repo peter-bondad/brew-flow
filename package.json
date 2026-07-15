@@ -14,11 +14,10 @@
     "db:studio": "drizzle-kit studio",
     "db:push:prod": "dotenv -e .env.prod drizzle-kit push",
     "db:migrate:prod": "dotenv -e .env.prod drizzle-kit migrate",
-    "db:generate:prod": "dotenv -e .env.prod drizzle-kit generate",
-    "db:studio:prod": "dotenv -e .env.prod drizzle-kit studio",
-    "db:sync-auth": "pnpm run db:auth-gen && pnpm run db:generate && pnpm run db:migrate",
+    "db:sync:schema": "pnpm db:auth-gen && pnpm db:generate && pnpm db:migrate",
     "db:seed": "dotenv -e .env -- tsx src/server/infra/database/seed.ts",
-    "db:seed:prod": "dotenv -e .env.prod -- tsx src/server/infra/database/seed-prod.ts"
+    "db:seed:prod": "dotenv -e .env.prod -- tsx src/server/infra/database/seed-prod.ts",
+    "db:reset": "docker compose down -v && docker compose up -d"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
