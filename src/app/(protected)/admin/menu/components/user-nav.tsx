@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Loader2, LogOut, Settings } from "lucide-react";
+import { Loader2, LogOut, Repeat, Settings } from "lucide-react";
 import { toast } from "sonner";
 
 type UserNavProps = {
@@ -26,25 +26,31 @@ type UserNavProps = {
   } | null;
 };
 
+type ActionTypes = "logout" | "switch";
+
 export function UserNav({ user }: UserNavProps) {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [pendingAction, setPendingAction] = useState<
+    "logout" | "switch" | null
+  >(null);
 
-  async function handleLogout() {
-    setLoading(true);
+  async function endSession(nextAction: ActionTypes) {
+    setPendingAction(nextAction);
 
     try {
       await authClient.signOut();
 
-      toast.success("Logged out successfully.");
+      if (nextAction === "logout") {
+        toast.success("Logged out.");
+      }
 
       router.replace("/login");
       router.refresh();
     } catch {
-      toast.error("Unable to logout.");
+      toast.error("Couldn't sign out. Try again.");
     } finally {
-      setLoading(false);
+      setPendingAction(null);
     }
   }
 
@@ -103,10 +109,24 @@ export function UserNav({ user }: UserNavProps) {
           <Button
             variant="ghost"
             className="cursor-pointer w-full justify-start"
-            disabled={loading}
-            onClick={handleLogout}
+            disabled={pendingAction !== null}
+            onClick={() => endSession("switch")}
           >
-            {loading ? (
+            {pendingAction === "switch" ? (
+              <Loader2 className="mr-2 size-4 animate-spin" />
+            ) : (
+              <Repeat className="mr-2 size-4" />
+            )}
+            Switch account
+          </Button>
+
+          <Button
+            variant="ghost"
+            className="cursor-pointer w-full justify-start"
+            disabled={pendingAction !== null}
+            onClick={() => endSession("logout")}
+          >
+            {pendingAction === "logout" ? (
               <Loader2 className="mr-2 size-4 animate-spin" />
             ) : (
               <LogOut className="mr-2 size-4" />
