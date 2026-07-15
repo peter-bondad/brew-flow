@@ -28,9 +28,13 @@ export const ac = createAccessControl(statement);
 export const owner = ac.newRole({
   user: ["create", "read", "update", "delete"],
 
+  menu: ["create", "read", "update"],
+
   invitation: ["create", "read", "delete"],
 
   inventory: ["create", "read", "update", "delete"],
+
+  order: ["create", "read", "update"],
 
   report: ["read"],
 });
