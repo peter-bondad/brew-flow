@@ -1,9 +1,8 @@
-import type { Session } from "@/lib/auth";
-import type { Permission } from "@/lib/permission/permissions";
+import { AuthSession, UserAuth } from "@/lib/auth-types";
+import { Permission } from "@/lib/permission/permissions";
 
 export interface SessionContextValue {
-  session: Session["session"];
-  user: Session["user"];
-
+  session: AuthSession["session"];
+  user: UserAuth;
   hasPermission(permission: Permission): boolean;
 }

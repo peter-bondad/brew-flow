@@ -2,15 +2,9 @@
 
 import { createContext, useContext } from "react";
 import type { AuthSession, UserAuth } from "@/lib/auth-types";
-import { Permission } from "@/lib/permission/permissions";
 import { hasPermission } from "@/lib/permission/has-permission";
 import { isUserRole } from "@/server/shared/user-role.types";
-
-interface SessionContextValue {
-  session: AuthSession["session"];
-  user: UserAuth;
-  hasPermission(permission: Permission): boolean;
-}
+import { SessionContextValue } from "./session-provider.types";
 
 interface SessionProviderProps {
   session: AuthSession;
