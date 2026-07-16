@@ -16,9 +16,13 @@ export class InvitationRepository implements IInvitationRepository {
   constructor(private readonly database = db) {}
 
   async create(data: CreateInvitation): Promise<void> {
+    const fullName = [data.firstName, data.middleName, data.lastName]
+      .filter(Boolean)
+      .join(" ");
+
     await this.database.insert(invitations).values({
       ...data,
-      name: `${data.firstName} ${data.middleName} ${data.lastName}`,
+      name: fullName,
       status: invitationStatus.Pending,
     });
   }
@@ -48,6 +52,9 @@ export class InvitationRepository implements IInvitationRepository {
         id: true,
         email: true,
         name: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
         role: true,
         status: true,
         expiresAt: true,
