@@ -56,7 +56,7 @@ export const navigation: NavigationGroup[] = [
       },
       {
         title: "Invitations",
-        href: "/admin/invitations",
+        href: "/admin/invite",
         icon: MailPlus,
         permission: {
           invitation: ["read"],
