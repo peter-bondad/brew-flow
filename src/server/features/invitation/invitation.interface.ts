@@ -1,13 +1,26 @@
 import { UserRole } from "@/server/shared/user-role.types";
 import { InvitationStatus } from "./invitation.constant";
 
+// for repository/database model
 export interface CreateInvitation {
   email: string;
-  name?: string | null;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
   role: UserRole;
   tokenHash: string;
   expiresAt: Date;
   createdBy: string;
+}
+
+// for service model
+export interface AcceptInvitationInput {
+  token: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  phoneNumber?: string;
+  password: string;
 }
 
 export interface PendingInvitation {
@@ -19,7 +32,10 @@ export interface PendingInvitation {
 export interface InvitationForAcceptance {
   id: string;
   email: string;
-  name: string | null;
+  firstName: string;
+  middleName: string | undefined;
+  lastName: string;
+  phoneNumber: string | undefined;
   role: UserRole;
   status: InvitationStatus;
   acceptedAt: Date;
@@ -34,7 +50,9 @@ export interface MarkInvitationAccepted {
 // Service layer argument types
 export interface CreateInvitationInput {
   email: string;
-  name?: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
   role: UserRole;
 }
 
@@ -44,17 +62,20 @@ export interface CreateInvitationResult {
   expiresAt: Date;
 }
 
-export interface AcceptInvitationInput {
-  token: string;
-  name: string;
-  password: string;
-}
-
 export type InvitationDisplayResult =
   | { status: "not_found" }
   | { status: "expired" }
   | { status: "already_accepted" }
-  | { status: "valid"; invitation: { email: string; name: string } };
+  | {
+      status: "valid";
+      invitation: {
+        email: string;
+        firstName: string;
+        middleName?: string;
+        lastName: string;
+        phoneNumber?: string;
+      };
+    };
 
 export interface RevokeInvitationInput {
   invitationId: string;

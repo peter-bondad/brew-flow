@@ -18,6 +18,7 @@ export class InvitationRepository implements IInvitationRepository {
   async create(data: CreateInvitation): Promise<void> {
     await this.database.insert(invitations).values({
       ...data,
+      name: `${data.firstName} ${data.middleName} ${data.lastName}`,
       status: invitationStatus.Pending,
     });
   }

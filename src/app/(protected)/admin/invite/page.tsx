@@ -1,4 +1,4 @@
-import { InviteUserForm } from "@/app/(protected)/admin/invitations/components/InviteUserForm";
+import { InviteUserForm } from "@/app/(protected)/admin/invite/components/InviteUserForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { ensurePermission } from "@/lib/auth-guard";
 import { MailPlus } from "lucide-react";
@@ -9,8 +9,9 @@ export default async function InvitationsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <section className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fff9f2] shadow-lg">
+    <div className="space-y-8">
+      {/* Hero */}
+      <section className="mx-auto max-w-5xl rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fff9f2] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-white/10 p-3">
             <MailPlus className="size-6" />
@@ -31,11 +32,14 @@ export default async function InvitationsPage() {
         </p>
       </section>
 
-      <Card className="rounded-3xl border-[#e5c5a3]">
-        <CardContent className="p-8">
-          <InviteUserForm />
-        </CardContent>
-      </Card>
+      {/* Form */}
+      <div className="mx-auto w-full max-w-2xl">
+        <Card className="rounded-3xl border-[#e5c5a3]">
+          <CardContent className="p-6">
+            <InviteUserForm />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

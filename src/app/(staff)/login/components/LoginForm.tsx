@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import authClient from "@/lib/auth-client";
@@ -38,9 +39,8 @@ export function LoginForm() {
         email: email.trim(),
         password,
       });
-
       if (error) {
-        if (env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === "development") {
           console.dir(error);
         }
         setError(error.message ?? "Login failed. Please try again.");
@@ -62,7 +62,8 @@ export function LoginForm() {
 
       toast.success(`Welcome back to BrewFlow, ${data.user.firstName}`);
       router.replace("/admin");
-    } catch {
+    } catch (err: unknown) {
+      console.dir(err, { depth: null });
       toast.error("Something went wrong.");
     } finally {
       window.clearTimeout(loadingTimer);
@@ -88,10 +89,9 @@ export function LoginForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor={emailId} className="text-[#5d4033]">
-              Email
-            </Label>
+          <Field>
+            <FieldLabel htmlFor={emailId}>Email</FieldLabel>
+
             <Input
               id={emailId}
               type="email"
@@ -104,9 +104,11 @@ export function LoginForm() {
               inputMode="email"
               aria-invalid={Boolean(error)}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-12 rounded-xl border-[#ddc0a0] bg-[#fffdf9] px-4 text-[#3d2413] shadow-sm transition placeholder:text-[#9b7d61] focus-visible:border-[#8c5a2b] focus-visible:ring-[#e0b887]/70"
+              className="h-10 rounded-xl border-[#ddc0a0] bg-[#fffdf9] px-4 text-[#3d2413] shadow-sm transition placeholder:text-[#9b7d61] focus-visible:border-[#8c5a2b] focus-visible:ring-[#e0b887]/70"
             />
-          </div>
+
+            <FieldError>{error}</FieldError>
+          </Field>
 
           <div className="space-y-2">
             <Label htmlFor={passwordId} className="text-[#5d4033]">
@@ -124,7 +126,7 @@ export function LoginForm() {
                 autoComplete="current-password"
                 aria-invalid={Boolean(error)}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-12 rounded-xl border-[#ddc0a0] bg-[#fffdf9] px-4 pr-12 text-[#3d2413] shadow-sm transition placeholder:text-[#9b7d61] focus-visible:border-[#8c5a2b] focus-visible:ring-[#e0b887]/70"
+                className="h-10 rounded-xl border-[#ddc0a0] bg-[#fffdf9] px-4 pr-12 text-[#3d2413] shadow-sm transition placeholder:text-[#9b7d61] focus-visible:border-[#8c5a2b] focus-visible:ring-[#e0b887]/70"
               />
               <button
                 type="button"
@@ -166,12 +168,11 @@ export function LoginForm() {
           <Button
             type="submit"
             disabled={submitting}
-            size="lg"
-            className="cursor-pointer h-12 w-full rounded-full bg-[#6f3e1d] text-base text-[#fff8ef] shadow-[0_14px_30px_-18px_rgba(74,43,28,0.9)] hover:bg-[#8d5a2b] focus-visible:ring-[#e0b887]"
+            className="cursor-pointer h-10 px-6 rounded-full bg-[#6f3e1d] text-base text-[#fff8ef] shadow-[0_14px_30px_-18px_rgba(74,43,28,0.9)] hover:bg-[#8d5a2b] focus-visible:ring-[#e0b887]"
           >
-            {showLoading ? (
+            {showLoading && (
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-            ) : null}
+            )}
 
             <span>{showLoading ? "Signing in..." : "Sign in"}</span>
           </Button>

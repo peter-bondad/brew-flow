@@ -83,7 +83,9 @@ export default async function AcceptInvitationPage({
               <AcceptInviteForm
                 token={token}
                 email={invitation.email}
-                initialName={invitation.name}
+                firstName={invitation.firstName}
+                lastName={invitation.lastName}
+                phoneNumber={invitation.phoneNumber}
               />
             </div>
           </section>

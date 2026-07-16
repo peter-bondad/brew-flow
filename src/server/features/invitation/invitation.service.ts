@@ -55,7 +55,9 @@ export class InvitationService {
       // Save the invite as "pending" so it can later be looked up and accepted.
       await this.invitationIRepository.create({
         email: input.email,
-        name: input.name,
+        firstName: input.firstName,
+        middleName: input.middleName,
+        lastName: input.lastName,
         role: input.role,
         tokenHash: hashedInvitationToken,
         createdBy: userId,
@@ -74,7 +76,7 @@ export class InvitationService {
 
     // Send the actual email with the accept link.
     await this.emailService.sendInvitation({
-      name: input.name,
+      name: `${input.firstName} ${input.middleName} ${input.lastName}`,
       email: input.email,
       invitationUrl,
       expiresAt: invitationExpire,
@@ -113,14 +115,24 @@ export class InvitationService {
     if (existingUser) throw new UserEmailAlreadyExists();
 
     let createdUser;
+
     try {
-      // This actually creates the login-capable account (email + password + role).
+      const fullName = [input.firstName, input.middleName, input.lastName]
+        .filter(Boolean)
+        .join(" ");
+
       createdUser = await auth.api.createUser({
         body: {
           email: invitation.email,
-          name: input.name,
           password: input.password,
+          name: fullName,
           role: invitation.role,
+          data: {
+            firstName: input.firstName,
+            middleName: input.middleName,
+            lastName: input.lastName,
+            phoneNumber: input.phoneNumber,
+          },
         },
       });
     } catch (err) {
@@ -194,7 +206,10 @@ export class InvitationService {
       status: "valid",
       invitation: {
         email: invitation.email,
-        name: invitation.name ?? "",
+        firstName: invitation.firstName,
+        middleName: invitation.middleName,
+        lastName: invitation.lastName,
+        phoneNumber: invitation.phoneNumber,
       },
     };
   }

@@ -36,10 +36,14 @@ export const createInvitationController = factory.createHandlers(
 export const acceptInvitationController = factory.createHandlers(
   validator("json", acceptInvitationDto),
   async (c) => {
-    const { name, password, token } = c.req.valid("json");
+    const { firstName, middleName, lastName, phoneNumber, password, token } =
+      c.req.valid("json");
 
     await container.invitationService.acceptInvitation({
-      name,
+      firstName,
+      middleName,
+      lastName,
+      phoneNumber,
       password,
       token,
     });

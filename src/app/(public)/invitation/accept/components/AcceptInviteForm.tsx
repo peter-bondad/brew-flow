@@ -11,9 +11,10 @@ import { toast } from "sonner";
 type AcceptInviteFormProps = {
   token: string;
   email: string;
-  initialName: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
 };
-
 type AcceptInvitationResponse = {
   message: string;
 };
@@ -21,10 +22,10 @@ type AcceptInvitationResponse = {
 export function AcceptInviteForm({
   token,
   email,
-  initialName,
+  firstName,
+  lastName,
 }: AcceptInviteFormProps) {
   const router = useRouter();
-  const [name, setName] = useState(initialName);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -53,9 +54,8 @@ export function AcceptInviteForm({
 
         body: JSON.stringify({
           token,
-
-          name,
-
+          firstName,
+          lastName,
           password,
         }),
       });
@@ -106,11 +106,9 @@ export function AcceptInviteForm({
         <Input
           id="invite-name"
           type="text"
-          value={name}
-          required
-          disabled={submitting}
+          value={`${firstName} ${lastName}`}
+          disabled
           autoComplete="name"
-          onChange={(event) => setName(event.target.value)}
           className="h-11"
         />
       </div>
@@ -156,7 +154,11 @@ export function AcceptInviteForm({
         </p>
       ) : null}
 
-      <Button type="submit" disabled={submitting} className="h-11 w-full">
+      <Button
+        type="submit"
+        disabled={submitting}
+        className="cursor-pointer h-11 w-full"
+      >
         {submitting ? (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
         ) : null}
