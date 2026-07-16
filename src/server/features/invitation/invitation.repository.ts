@@ -56,6 +56,22 @@ export class InvitationRepository implements IInvitationRepository {
     }) as Promise<InvitationForAcceptance | undefined>;
   }
 
+  async claimForAcceptance(invitationId: string): Promise<boolean> {
+    const result = await this.database
+      .update(invitations)
+      .set({ status: invitationStatus.Processing })
+      .where(
+        and(
+          eq(invitations.id, invitationId),
+          eq(invitations.status, invitationStatus.Pending),
+          gt(invitations.expiresAt, new Date()), // guards against a race with the expiry cron
+        ),
+      )
+      .returning({ id: invitations.id });
+
+    return result.length > 0;
+  }
+
   async markAccepted({
     invitationId,
     usedBy,
@@ -70,7 +86,7 @@ export class InvitationRepository implements IInvitationRepository {
       .where(
         and(
           eq(invitations.id, invitationId),
-          eq(invitations.status, invitationStatus.Pending),
+          eq(invitations.status, invitationStatus.Processing),
         ),
       );
   }
@@ -79,7 +95,7 @@ export class InvitationRepository implements IInvitationRepository {
     await this.database
       .update(invitations)
       .set({
-        status: "revoked",
+        status: invitationStatus.Revoked,
       })
       .where(eq(invitations.id, invitationId));
   }

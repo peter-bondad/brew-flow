@@ -1,5 +1,6 @@
 export const invitationStatus = {
   Pending: "pending",
+  Processing: "processing",
   Accepted: "accepted",
   Revoked: "revoked",
   Expired: "expired",

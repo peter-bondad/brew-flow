@@ -20,10 +20,12 @@ import {
 import { EmailService } from "@/server/email/email.interface";
 import { isExpired } from "@/utils/time";
 import { IUserRepository } from "../user/user.interface";
-import { UserEmailAlreadyExists } from "../user/user.error";
 import { auth } from "@/lib/auth";
 import { invitationStatus } from "./invitation.constant";
 import { UserDto } from "../user/user.dto";
+import { UserEmailAlreadyExists } from "../user/user.error";
+
+// invitation.service.ts
 
 export class InvitationService {
   constructor(
@@ -33,9 +35,11 @@ export class InvitationService {
   ) {}
 
   async createInvitation(
-    userId: string, // user authenticated
+    userId: string, // the owner/manager sending the invite
     input: CreateInvitationInput,
   ): Promise<CreateInvitationResult> {
+    // Don't send a second invite if one is already pending for this email —
+    // prevents spamming the same person with multiple invite links.
     const existingInvitationEmail =
       await this.invitationIRepository.findPendingByEmail(input.email);
 
@@ -46,17 +50,29 @@ export class InvitationService {
     const invitationToken = createInvitationToken();
     const hashedInvitationToken = hashInvitationToken(invitationToken);
     const invitationExpire = createInvitationExpiry();
-    await this.invitationIRepository.create({
-      email: input.email,
-      name: input.name,
-      role: input.role,
-      tokenHash: hashedInvitationToken,
-      createdBy: userId,
-      expiresAt: invitationExpire,
-    });
+
+    try {
+      // Save the invite as "pending" so it can later be looked up and accepted.
+      await this.invitationIRepository.create({
+        email: input.email,
+        name: input.name,
+        role: input.role,
+        tokenHash: hashedInvitationToken,
+        createdBy: userId,
+        expiresAt: invitationExpire,
+      });
+    } catch (err) {
+      // Temporary: catches any unexpected DB failure here so it's visible in
+      // logs instead of failing silently. Once we add a DB-level uniqueness
+      // rule, this will also catch the "two invites sent at the same time"
+      // race and turn it into the same InvitationAlreadyExistsError above.
+      console.error("[createInvitation] insert failed", err);
+      throw err;
+    }
 
     const invitationUrl = createInvitationUrl(invitationToken);
 
+    // Send the actual email with the accept link.
     await this.emailService.sendInvitation({
       name: input.name,
       email: input.email,
@@ -89,27 +105,61 @@ export class InvitationService {
       throw new InvitationExpiredError();
     }
 
+    // Make sure nobody already grabbed this email before this invite gets used.
     const existingUser = await this.userIRepository.findByEmail(
       invitation.email,
     );
 
-    if (existingUser) {
-      throw new UserEmailAlreadyExists();
+    if (existingUser) throw new UserEmailAlreadyExists();
+
+    let createdUser;
+    try {
+      // This actually creates the login-capable account (email + password + role).
+      createdUser = await auth.api.createUser({
+        body: {
+          email: invitation.email,
+          name: input.name,
+          password: input.password,
+          role: invitation.role,
+        },
+      });
+    } catch (err) {
+      // If account creation itself fails, nothing else has happened yet —
+      // safe to just log and bubble up, no cleanup needed.
+      console.error("[acceptInvitation] createUser failed", err);
+      throw err;
     }
 
-    const createdUser = await auth.api.createUser({
-      body: {
-        email: invitation.email,
-        name: input.name,
-        password: input.password,
-        role: invitation.role,
-      },
-    });
+    // The invite link is our proof this person owns the email — so mark it
+    // verified now instead of making them click a separate verification email.
+    const verified = await this.userIRepository.updateEmailVerified(
+      createdUser.user.id,
+    );
 
-    await this.invitationIRepository.markAccepted({
-      invitationId: invitation.id,
-      usedBy: createdUser.user.id,
-    });
+    if (!verified) {
+      // Shouldn't normally happen right after creating the user — log it so
+      // it's noticeable if it ever does.
+      console.error("[acceptInvitation] failed to mark email verified", {
+        userId: createdUser.user.id,
+      });
+    }
+
+    try {
+      // Close out the invite so it can't be used again.
+      await this.invitationIRepository.markAccepted({
+        invitationId: invitation.id,
+        usedBy: createdUser.user.id,
+      });
+    } catch (err) {
+      // Worst case in this flow: the account now exists, but the invite
+      // still looks "pending." Logged loudly on purpose — this is the one
+      // gap we haven't fully closed yet (see notes on idempotent resume).
+      console.error(
+        "[acceptInvitation] markAccepted failed after user was created",
+        { invitationId: invitation.id, userId: createdUser.user.id, err },
+      );
+      throw err;
+    }
 
     return {
       id: createdUser.user.id,
@@ -122,6 +172,8 @@ export class InvitationService {
   async getInvitationForDisplay(
     token: string,
   ): Promise<InvitationDisplayResult> {
+    // Used by the invite landing page to show "valid / expired / already used"
+    // before the person even tries to submit the accept form.
     const hashedToken = hashInvitationToken(token);
     const invitation =
       await this.invitationIRepository.findByHashedToken(hashedToken);
@@ -147,7 +199,7 @@ export class InvitationService {
     };
   }
 
-  // For Vercel Cron Controller
+  // Runs on a schedule (Vercel Cron) to clean up invites nobody accepted in time.
   async expireInvitations(): Promise<number> {
     return await this.invitationIRepository.expireExpiredInvitations();
   }

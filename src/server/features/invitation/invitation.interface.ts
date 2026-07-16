@@ -31,21 +31,6 @@ export interface MarkInvitationAccepted {
   usedBy: string;
 }
 
-export interface IInvitationRepository {
-  create(data: CreateInvitation): Promise<void>;
-
-  findPendingByEmail(email: string): Promise<PendingInvitation | undefined>;
-
-  findByHashedToken(
-    tokenHash: string,
-  ): Promise<InvitationForAcceptance | undefined>;
-
-  markAccepted(data: MarkInvitationAccepted): Promise<void>;
-
-  revoke(invitationId: string): Promise<void>;
-  expireExpiredInvitations(): Promise<number>;
-}
-
 // Service layer argument types
 export interface CreateInvitationInput {
   email: string;
@@ -73,4 +58,20 @@ export type InvitationDisplayResult =
 
 export interface RevokeInvitationInput {
   invitationId: string;
+}
+
+export interface IInvitationRepository {
+  create(data: CreateInvitation): Promise<void>;
+
+  findPendingByEmail(email: string): Promise<PendingInvitation | undefined>;
+
+  findByHashedToken(
+    tokenHash: string,
+  ): Promise<InvitationForAcceptance | undefined>;
+
+  claimForAcceptance(email: string): Promise<boolean>;
+  markAccepted(data: MarkInvitationAccepted): Promise<void>;
+
+  revoke(invitationId: string): Promise<void>;
+  expireExpiredInvitations(): Promise<number>;
 }

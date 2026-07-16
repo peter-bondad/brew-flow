@@ -16,4 +16,5 @@ export interface User {
 
 export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
+  updateEmailVerified(userId: string): Promise<boolean>;
 }
