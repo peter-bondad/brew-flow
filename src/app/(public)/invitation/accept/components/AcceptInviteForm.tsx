@@ -13,7 +13,6 @@ type AcceptInviteFormProps = {
   email: string;
   firstName: string;
   lastName: string;
-  phoneNumber?: string;
 };
 type AcceptInvitationResponse = {
   message: string;
@@ -157,7 +156,7 @@ export function AcceptInviteForm({
       <Button
         type="submit"
         disabled={submitting}
-        className="cursor-pointer h-11 w-full"
+        className="cursor-pointer h-9 rounded-full px-6 bg-[#6f3e1d] text-[#fff8ef] hover:bg-[#8d5a2b]"
       >
         {submitting ? (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />

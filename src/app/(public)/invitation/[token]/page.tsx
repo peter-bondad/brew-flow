@@ -85,7 +85,6 @@ export default async function AcceptInvitationPage({
                 email={invitation.email}
                 firstName={invitation.firstName}
                 lastName={invitation.lastName}
-                phoneNumber={invitation.phoneNumber}
               />
             </div>
           </section>
