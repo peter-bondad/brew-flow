@@ -1,6 +1,7 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./auth-schema";
 import { orderStatusEnum } from "./schema-pg.enum";
+import { productVariants } from "./product-schema";
 
 export const orders = pgTable("orders", {
   id: text("id").primaryKey(),
@@ -17,9 +18,7 @@ export const orders = pgTable("orders", {
 
   stripeSessionId: text("stripe_session_id").unique(),
 
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 });
@@ -29,13 +28,15 @@ export const orderItems = pgTable("order_items", {
 
   orderId: text("order_id")
     .notNull()
-    .references(() => orders.id, {
-      onDelete: "cascade",
-    }),
+    .references(() => orders.id, { onDelete: "cascade" }),
 
-  productId: text("product_id").notNull(),
+  variantId: text("variant_id")
+    .notNull()
+    .references(() => productVariants.id),
 
+  // snapshot fields — preserved even if product/variant is later renamed or deleted
   productName: text("product_name").notNull(),
+  variantName: text("variant_name").notNull(), // "Small", "Regular", etc.
 
   unitPrice: integer("unit_price").notNull(),
 

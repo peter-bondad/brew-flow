@@ -1,25 +1,19 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./auth-schema";
-import { products } from "./product-schema";
+import { productVariants } from "./product-schema";
 
 export const carts = pgTable("carts", {
   id: text("id").primaryKey(),
 
   userId: text("user_id")
     .notNull()
-    .references(() => users.id, {
-      onDelete: "cascade",
-    }),
+    .references(() => users.id, { onDelete: "cascade" }),
 
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-  })
+  updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
@@ -30,13 +24,11 @@ export const cartItems = pgTable("cart_items", {
 
   cartId: text("cart_id")
     .notNull()
-    .references(() => carts.id, {
-      onDelete: "cascade",
-    }),
+    .references(() => carts.id, { onDelete: "cascade" }),
 
-  productId: text("product_id")
+  variantId: text("variant_id")
     .notNull()
-    .references(() => products.id),
+    .references(() => productVariants.id),
 
   quantity: integer("quantity").notNull(),
 });
