@@ -161,7 +161,7 @@ export function AcceptInviteForm({
         {submitting ? (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
         ) : null}
-        <span>{submitting ? "Creating account..." : "Create account"}</span>
+        <span>{submitting ? "Creating account..." : "Done"}</span>
       </Button>
     </form>
   );
