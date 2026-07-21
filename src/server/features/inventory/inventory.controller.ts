@@ -2,17 +2,17 @@ import { factory } from "@/server/hono/hono-factory";
 import { container } from "@/server/container";
 import { validator } from "@/server/shared/validator";
 import {
-  adjustIngredientStockDto,
-  createIngredientDto,
-  idParamDto,
-  listIngredientsQueryDto,
-  listTransactionsQueryDto,
-  restockIngredientDto,
-  updateIngredientDto,
+  adjustIngredientStockRequest,
+  createIngredientRequest,
+  idParamRequest,
+  listIngredientsQueryRequest,
+  listTransactionsQueryRequest,
+  restockIngredientRequest,
+  updateIngredientRequest,
 } from "./inventory.dto";
 
 export const listIngredientsController = factory.createHandlers(
-  validator("query", listIngredientsQueryDto),
+  validator("query", listIngredientsQueryRequest),
   async (c) => {
     const query = c.req.valid("query");
     const data = await container.inventoryService.listIngredients(query);
@@ -22,7 +22,7 @@ export const listIngredientsController = factory.createHandlers(
 );
 
 export const getIngredientController = factory.createHandlers(
-  validator("param", idParamDto),
+  validator("param", idParamRequest),
   async (c) => {
     const { id } = c.req.valid("param");
     const data = await container.inventoryService.getIngredient(id);
@@ -32,7 +32,7 @@ export const getIngredientController = factory.createHandlers(
 );
 
 export const createIngredientController = factory.createHandlers(
-  validator("json", createIngredientDto),
+  validator("json", createIngredientRequest),
   async (c) => {
     const input = c.req.valid("json");
     const data = await container.inventoryService.createIngredient(input);
@@ -42,8 +42,8 @@ export const createIngredientController = factory.createHandlers(
 );
 
 export const updateIngredientController = factory.createHandlers(
-  validator("param", idParamDto),
-  validator("json", updateIngredientDto),
+  validator("param", idParamRequest),
+  validator("json", updateIngredientRequest),
   async (c) => {
     const { id } = c.req.valid("param");
     const input = c.req.valid("json");
@@ -54,7 +54,7 @@ export const updateIngredientController = factory.createHandlers(
 );
 
 export const deactivateIngredientController = factory.createHandlers(
-  validator("param", idParamDto),
+  validator("param", idParamRequest),
   async (c) => {
     const { id } = c.req.valid("param");
     await container.inventoryService.deactivateIngredient(id);
@@ -64,8 +64,8 @@ export const deactivateIngredientController = factory.createHandlers(
 );
 
 export const restockIngredientController = factory.createHandlers(
-  validator("param", idParamDto),
-  validator("json", restockIngredientDto),
+  validator("param", idParamRequest),
+  validator("json", restockIngredientRequest),
   async (c) => {
     const user = c.get("user");
 
@@ -82,8 +82,8 @@ export const restockIngredientController = factory.createHandlers(
 );
 
 export const adjustIngredientStockController = factory.createHandlers(
-  validator("param", idParamDto),
-  validator("json", adjustIngredientStockDto),
+  validator("param", idParamRequest),
+  validator("json", adjustIngredientStockRequest),
   async (c) => {
     const user = c.get("user");
 
@@ -104,8 +104,8 @@ export const adjustIngredientStockController = factory.createHandlers(
 );
 
 export const listIngredientTransactionsController = factory.createHandlers(
-  validator("param", idParamDto),
-  validator("query", listTransactionsQueryDto),
+  validator("param", idParamRequest),
+  validator("query", listTransactionsQueryRequest),
   async (c) => {
     const { id } = c.req.valid("param");
     const query = c.req.valid("query");
