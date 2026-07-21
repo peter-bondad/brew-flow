@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AccountSettings } from "./account-settings";
 import { AppearanceSettings } from "./appearance-settings";
-import { SecuritySettings } from "./security-settings";
 import { SettingsCard } from "./settings-card";
 import { StoreSettings } from "./store-settings";
 
@@ -32,10 +31,6 @@ export function SettingsTabs() {
           Account
         </TabsTrigger>
 
-        <TabsTrigger value="security" className={triggerClass}>
-          Security
-        </TabsTrigger>
-
         <TabsTrigger value="appearance" className={triggerClass}>
           Appearance
         </TabsTrigger>
@@ -47,15 +42,6 @@ export function SettingsTabs() {
 
       <TabsContent value="account">
         <AccountSettings />
-      </TabsContent>
-
-      <TabsContent value="security">
-        <SettingsCard
-          title="Security"
-          description="Manage your password and authentication settings."
-        >
-          <SecuritySettings />
-        </SettingsCard>
       </TabsContent>
 
       <TabsContent value="appearance">
