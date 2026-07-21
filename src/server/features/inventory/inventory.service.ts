@@ -1,11 +1,3 @@
-import type {
-  AdjustIngredientStockDto,
-  CreateIngredientDto,
-  ListIngredientsQueryDto,
-  ListTransactionsQueryDto,
-  RestockIngredientDto,
-  UpdateIngredientDto,
-} from "./inventory.dto";
 import {
   IngredientNotFoundError,
   IngredientSkuAlreadyExistsError,
@@ -17,11 +9,21 @@ import type {
   InventoryTransaction,
 } from "./inventory.interface";
 import { inventoryTransactionType } from "./inventory.constant";
+import {
+  AdjustIngredientStockRequest,
+  CreateIngredientRequest,
+  ListIngredientsQueryRequest,
+  ListTransactionsQueryRequest,
+  RestockIngredientRequest,
+  UpdateIngredientRequest,
+} from "./inventory.dto";
 
 export class InventoryService {
   constructor(private readonly inventoryRepository: IInventoryRepository) {}
 
-  async listIngredients(query: ListIngredientsQueryDto): Promise<Ingredient[]> {
+  async listIngredients(
+    query: ListIngredientsQueryRequest,
+  ): Promise<Ingredient[]> {
     return this.inventoryRepository.findAllIngredients(query);
   }
 
@@ -35,7 +37,7 @@ export class InventoryService {
     return ingredient;
   }
 
-  async createIngredient(input: CreateIngredientDto): Promise<Ingredient> {
+  async createIngredient(input: CreateIngredientRequest): Promise<Ingredient> {
     if (input.sku) {
       const existing = await this.inventoryRepository.findIngredientBySku(
         input.sku,
@@ -62,7 +64,7 @@ export class InventoryService {
 
   async updateIngredient(
     id: string,
-    input: UpdateIngredientDto,
+    input: UpdateIngredientRequest,
   ): Promise<Ingredient> {
     await this.getIngredient(id); // 404s if missing
 
@@ -111,7 +113,7 @@ export class InventoryService {
 
   async restock(
     id: string,
-    input: RestockIngredientDto,
+    input: RestockIngredientRequest,
     userId: string,
   ): Promise<InventoryTransaction> {
     await this.getIngredient(id); // 404s before touching stock
@@ -137,7 +139,7 @@ export class InventoryService {
 
   async adjustStock(
     id: string,
-    input: AdjustIngredientStockDto,
+    input: AdjustIngredientStockRequest,
     userId: string,
   ): Promise<InventoryTransaction> {
     await this.getIngredient(id); // 404s if missing
@@ -159,7 +161,7 @@ export class InventoryService {
 
   async listTransactions(
     ingredientId: string,
-    query: ListTransactionsQueryDto,
+    query: ListTransactionsQueryRequest,
   ): Promise<InventoryTransaction[]> {
     await this.getIngredient(ingredientId); // 404s if missing
 

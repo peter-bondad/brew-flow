@@ -1,18 +1,18 @@
 import { z } from "zod";
 import { inventoryUnit, manualAdjustmentType } from "./inventory.constant";
 
-export const idParamDto = z
+export const idParamRequest = z
   .object({
     id: z.string().trim().min(1),
   })
   .strict();
 
-export type IdParamDto = z.infer<typeof idParamDto>;
+export type IdParamRequest = z.infer<typeof idParamRequest>;
 
 // Note: intentionally no `currentStock` field here. New ingredients always
 // start at 0 and are stocked via /restock, so every unit ever added is
 // backed by an inventoryTransactions row — never set silently on create.
-export const createIngredientDto = z
+export const createIngredientRequest = z
   .object({
     name: z.string().trim().min(1).max(150),
     sku: z.string().trim().min(1).max(60).optional(),
@@ -24,9 +24,9 @@ export const createIngredientDto = z
   })
   .strict();
 
-export type CreateIngredientDto = z.infer<typeof createIngredientDto>;
+export type CreateIngredientRequest = z.infer<typeof createIngredientRequest>;
 
-export const updateIngredientDto = z
+export const updateIngredientRequest = z
   .object({
     name: z.string().trim().min(1).max(150).optional(),
     sku: z.string().trim().min(1).max(60).optional(),
@@ -41,9 +41,9 @@ export const updateIngredientDto = z
     message: "At least one field must be provided.",
   });
 
-export type UpdateIngredientDto = z.infer<typeof updateIngredientDto>;
+export type UpdateIngredientRequest = z.infer<typeof updateIngredientRequest>;
 
-export const restockIngredientDto = z
+export const restockIngredientRequest = z
   .object({
     quantity: z.number().int().positive(),
     unitCost: z.number().int().min(0).optional(), // update cost basis if the new batch price changed
@@ -51,9 +51,9 @@ export const restockIngredientDto = z
   })
   .strict();
 
-export type RestockIngredientDto = z.infer<typeof restockIngredientDto>;
+export type RestockIngredientRequest = z.infer<typeof restockIngredientRequest>;
 
-export const adjustIngredientStockDto = z
+export const adjustIngredientStockRequest = z
   .object({
     type: z.enum(manualAdjustmentType),
     quantityChange: z.number().int().positive(),
@@ -61,9 +61,11 @@ export const adjustIngredientStockDto = z
   })
   .strict();
 
-export type AdjustIngredientStockDto = z.infer<typeof adjustIngredientStockDto>;
+export type AdjustIngredientStockRequest = z.infer<
+  typeof adjustIngredientStockRequest
+>;
 
-export const listIngredientsQueryDto = z
+export const listIngredientsQueryRequest = z
   .object({
     search: z.string().trim().max(150).optional(),
     lowStockOnly: z
@@ -79,13 +81,17 @@ export const listIngredientsQueryDto = z
   })
   .strict();
 
-export type ListIngredientsQueryDto = z.infer<typeof listIngredientsQueryDto>;
+export type ListIngredientsQueryRequest = z.infer<
+  typeof listIngredientsQueryRequest
+>;
 
-export const listTransactionsQueryDto = z
+export const listTransactionsQueryRequest = z
   .object({
     limit: z.coerce.number().int().min(1).max(100).default(50),
     offset: z.coerce.number().int().min(0).default(0),
   })
   .strict();
 
-export type ListTransactionsQueryDto = z.infer<typeof listTransactionsQueryDto>;
+export type ListTransactionsQueryRequest = z.infer<
+  typeof listTransactionsQueryRequest
+>;
