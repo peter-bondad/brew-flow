@@ -37,3 +37,10 @@ export const inventoryTransactionTypeEnum = pgEnum(
   "inventory_transaction_type",
   ["restock", "sale_deduction", "adjustment", "waste", "return"],
 );
+
+export const inventoryReferenceTypeEnum = pgEnum("inventory_reference_type", [
+  "manual",
+  "order",
+  "purchase_order",
+  "stock_count",
+]);
