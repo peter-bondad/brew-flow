@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { UserNav } from "./user-nav";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 
 type AppSidebarProps = {
   user: {
@@ -53,22 +54,26 @@ export function AppSidebar({ user }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-3 px-3 py-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-[#6f3e1d]">
-            <Image
-              src="/icon.svg"
-              alt="Coffee"
-              width={24}
-              height={24}
-              className="size-6"
-            />
+        <div className="flex items-center justify-between px-3 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#6f3e1d]">
+              <Image
+                src="/icon.svg"
+                alt="Coffee"
+                width={24}
+                height={24}
+                className="size-6"
+              />
+            </div>
+
+            <div>
+              <h1 className="font-semibold text-[#3d2413]">BrewFlow</h1>
+
+              <p className="text-xs text-[#7b5f46]">Admin Panel</p>
+            </div>
           </div>
 
-          <div>
-            <h1 className="font-semibold text-[#3d2413]">BrewFlow</h1>
-
-            <p className="text-xs text-[#7b5f46]">Admin Panel</p>
-          </div>
+          <NotificationBell />
         </div>
       </SidebarHeader>
 
