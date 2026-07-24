@@ -1,7 +1,8 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { users } from "./auth-schema";
 import { orderStatusEnum } from "./schema-pg.enum";
-import { productVariants } from "./product-schema";
+import { products, productVariants } from "./product-schema";
 
 export const orders = pgTable("orders", {
   id: text("id").primaryKey(),
@@ -11,6 +12,8 @@ export const orders = pgTable("orders", {
     .references(() => users.id),
 
   status: orderStatusEnum("status").default("pending").notNull(),
+
+  paymentMethod: text("payment_method").notNull(),
 
   subtotal: integer("subtotal").notNull(),
 
@@ -30,6 +33,10 @@ export const orderItems = pgTable("order_items", {
     .notNull()
     .references(() => orders.id, { onDelete: "cascade" }),
 
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id),
+
   variantId: text("variant_id")
     .notNull()
     .references(() => productVariants.id),
@@ -44,3 +51,22 @@ export const orderItems = pgTable("order_items", {
 
   lineTotal: integer("line_total").notNull(),
 });
+
+export const ordersRelations = relations(orders, ({ many }) => ({
+  items: many(orderItems),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+  }),
+  product: one(products, {
+    fields: [orderItems.productId],
+    references: [products.id],
+  }),
+  variant: one(productVariants, {
+    fields: [orderItems.variantId],
+    references: [productVariants.id],
+  }),
+}));

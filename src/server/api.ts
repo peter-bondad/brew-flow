@@ -9,6 +9,8 @@ import publicInvitationRoutes from "./features/invitation/public.routes";
 import { appErrorHandler } from "./errors/app-error-handler";
 import inventoryAdminRoutes from "./features/inventory/admin.routes";
 import productAdminRoutes from "./features/product/admin.routes";
+import adminOrderRoutes from "./features/order/admin.routes";
+import publicOrderRoutes from "./features/order/public.routes";
 import jobRoutes from "./features/jobs/job.routes";
 
 const app = new Hono<Env>()
@@ -42,6 +44,8 @@ const app = new Hono<Env>()
   .route("/api/admin/invitations", adminInvitationRoutes)
   // inventory routes (admin routes)
   .route("/api/admin/inventory", inventoryAdminRoutes)
-  .route("/api/admin/products", productAdminRoutes);
+  .route("/api/admin/products", productAdminRoutes)
+  .route("/api/admin/orders", adminOrderRoutes)
+  .route("/api/orders", publicOrderRoutes);
 
 export default app;

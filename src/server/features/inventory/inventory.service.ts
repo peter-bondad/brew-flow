@@ -143,13 +143,36 @@ export class InventoryService {
     input: AdjustIngredientStockRequest,
     userId: string,
   ): Promise<InventoryTransaction> {
-    await this.getIngredient(id); // 404s if missing
+    await this.getIngredient(id); // 404s before touching stock
 
     const transaction = await this.inventoryRepository.applyStockChange({
       ingredientId: id,
       type: input.type,
       quantityChange: input.quantityChange,
       note: input.note,
+      createdBy: userId,
+    });
+
+    if (!transaction) {
+      throw new InsufficientStockError();
+    }
+
+    return transaction;
+  }
+
+  async applySaleDeduction(
+    id: string,
+    quantityChange: number,
+    note: string,
+    userId: string,
+  ): Promise<InventoryTransaction> {
+    await this.getIngredient(id);
+
+    const transaction = await this.inventoryRepository.applyStockChange({
+      ingredientId: id,
+      type: inventoryTransactionType.SaleDeduction,
+      quantityChange,
+      note,
       createdBy: userId,
     });
 
