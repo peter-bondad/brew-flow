@@ -10,6 +10,8 @@ import { resend } from "../email/resend";
 import { UserRepository } from "../features/user/user.repository";
 import { InventoryService } from "../features/inventory/inventory.service";
 import { InventoryRepository } from "../features/inventory/inventory.repository";
+import { ProductService } from "../features/product/product.service";
+import { ProductRepository } from "../features/product/product.repository";
 
 // email service
 const emailService =
@@ -20,6 +22,7 @@ const emailService =
 const userRepository = new UserRepository(db);
 const invitationRepository = new InvitationRepository(db);
 const inventoryRepository = new InventoryRepository(db);
+const productRepository = new ProductRepository(db);
 
 const invitationService = new InvitationService(
   userRepository,
@@ -28,9 +31,11 @@ const invitationService = new InvitationService(
 );
 
 const inventoryService = new InventoryService(inventoryRepository);
+const productService = new ProductService(productRepository);
 
 export const container = {
   invitationService,
   emailService,
   inventoryService,
+  productService,
 };
