@@ -35,7 +35,7 @@ export default function MenuPage() {
     <div className="space-y-8">
       {/* Header */}
 
-      <div className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fffaf5] shadow-xl">
+      <div className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-foreground shadow-xl">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-[#f5d5ae]">

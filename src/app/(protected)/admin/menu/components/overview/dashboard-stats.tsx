@@ -1,32 +1,31 @@
+import { StatusCard } from "@/components/dashboard/status-card";
 import { ShoppingCart, PhilippinePeso, Coffee, Users } from "lucide-react";
-
-import { DashboardStatCard } from "./dashboard-statcard";
 
 export function DashboardStats() {
   return (
     <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-      <DashboardStatCard
+      <StatusCard
         title="Orders Today"
         value="1,248"
         description="+12.5% from yesterday"
         icon={ShoppingCart}
       />
 
-      <DashboardStatCard
+      <StatusCard
         title="Revenue Today"
         value="₱128,430"
         description="+8.2% from yesterday"
         icon={PhilippinePeso}
       />
 
-      <DashboardStatCard
+      <StatusCard
         title="Menu Items"
         value="56"
         description="Currently available"
         icon={Coffee}
       />
 
-      <DashboardStatCard
+      <StatusCard
         title="Staff Members"
         value="34"
         description="Active accounts"
