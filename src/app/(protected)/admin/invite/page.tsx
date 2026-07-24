@@ -11,7 +11,7 @@ export default async function InvitationsPage() {
   return (
     <div className="space-y-8">
       {/* Hero */}
-      <section className="mx-auto max-w-5xl rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fff9f2] shadow-lg">
+      <section className="mx-auto max-w-5xl rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-6 text-[#fff9f2] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-white/10 p-3">
             <MailPlus className="size-6" />

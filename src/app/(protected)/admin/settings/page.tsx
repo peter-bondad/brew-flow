@@ -4,7 +4,7 @@ import { SettingsTabs } from "./components/settings-tab";
 export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-8">
-      <section className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-[#fff9f2] shadow-lg">
+      <section className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-6 text-[#fff9f2] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-white/10 p-3">
             <Settings className="size-6" />
@@ -21,7 +21,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <p className="mt-6 max-w-2xl leading-7 text-[#f7e9d8]">
+        <p className="mt-5 max-w-2xl text-sm text-[#f7e9d8]">
           Manage your profile, security, appearance, and store preferences from
           one place.
         </p>

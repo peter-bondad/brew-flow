@@ -3,13 +3,13 @@ import { AdjustIngredientStockRequest } from "@/server/shared/inventory/inventor
 import { Ingredient } from "@/server/shared/inventory/inventory.interface";
 import { manualAdjustmentType } from "@/server/shared/inventory/inventory.constant";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,17 +63,17 @@ export function AdjustStockDialog({
   };
 
   return (
-    <Sheet key={open ? "open" : "closed"} open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" showCloseButton={false}>
-        <SheetHeader>
-          <SheetTitle>Adjust Stock</SheetTitle>
-          <SheetDescription>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent showCloseButton={false} className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Adjust Stock</DialogTitle>
+          <DialogDescription>
             Manually adjust stock for <strong>{ingredient.name}</strong>.
             Current stock: {ingredient.currentStock} {ingredient.unit}
-          </SheetDescription>
-        </SheetHeader>
+          </DialogDescription>
+        </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="type">Adjustment Type</Label>
             <Select
@@ -127,7 +127,7 @@ export function AdjustStockDialog({
             />
           </div>
 
-          <SheetFooter className="mt-6">
+          <DialogFooter>
             <Button
               type="button"
               variant="outline"
@@ -139,9 +139,9 @@ export function AdjustStockDialog({
             <Button type="submit" disabled={mutation.isPending}>
               {mutation.isPending ? "Saving..." : "Save Adjustment"}
             </Button>
-          </SheetFooter>
+          </DialogFooter>
         </form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }

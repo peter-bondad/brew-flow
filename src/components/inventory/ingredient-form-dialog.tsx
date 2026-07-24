@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Ingredient } from "@/server/shared/inventory/inventory.interface";
 import { IngredientFormValues } from "./schemas/ingredient-form-schema";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,8 +48,6 @@ export function IngredientFormDialog({
   const isEditing = !!ingredient;
   const mutation = isEditing ? updateMutation : createMutation;
 
-  if (!ingredient && !open) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const values: IngredientFormValues = {
@@ -76,20 +74,20 @@ export function IngredientFormDialog({
   };
 
   return (
-    <Sheet key={open ? "open" : "closed"} open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" showCloseButton={false}>
-        <SheetHeader>
-          <SheetTitle>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent showCloseButton={false} className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>
             {isEditing ? "Edit Ingredient" : "Add Ingredient"}
-          </SheetTitle>
-          <SheetDescription>
+          </DialogTitle>
+          <DialogDescription>
             {isEditing
               ? "Update ingredient details below."
               : "Fill in the details for the new ingredient."}
-          </SheetDescription>
-        </SheetHeader>
+          </DialogDescription>
+        </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input
@@ -169,7 +167,7 @@ export function IngredientFormDialog({
             />
           </div>
 
-          <SheetFooter className="mt-6">
+          <DialogFooter>
             <Button
               type="button"
               variant="outline"
@@ -187,9 +185,9 @@ export function IngredientFormDialog({
                   ? "Save Changes"
                   : "Create Ingredient"}
             </Button>
-          </SheetFooter>
+          </DialogFooter>
         </form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }

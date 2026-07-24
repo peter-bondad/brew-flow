@@ -35,16 +35,16 @@ export default function MenuPage() {
     <div className="space-y-8">
       {/* Header */}
 
-      <div className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-8 text-foreground shadow-xl">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-6 text-foreground shadow-lg">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-[#f5d5ae]">
               BrewFlow
             </p>
 
-            <h1 className="mt-2 text-4xl font-bold">Menu Management</h1>
+            <h1 className="mt-2 text-3xl font-bold">Menu Management</h1>
 
-            <p className="mt-3 max-w-2xl text-[#f6e7d4]">
+            <p className="mt-1 max-w-2xl text-sm text-[#f6e7d4]">
               Manage menu items, categories, pricing, and availability across
               your coffee shop.
             </p>
@@ -59,7 +59,7 @@ export default function MenuPage() {
 
       {/* Stats */}
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         <Card className="border-[#e4c8a7]">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Total Items</CardTitle>

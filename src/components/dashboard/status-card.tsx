@@ -25,7 +25,7 @@ export function StatusCard({
               {title}
             </p>
 
-            <h3 className="mt-2 text-3xl font-bold text-[#3d2413] tracking-tight">
+            <h3 className="mt-2 text-3xl font-bold text-[#3d2413] tracking-normal tabular-nums">
               {value}
             </h3>
 
