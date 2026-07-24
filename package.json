@@ -16,6 +16,7 @@
     "db:migrate:prod": "dotenv -e .env.prod drizzle-kit migrate",
     "db:sync:schema": "pnpm db:generate && pnpm db:migrate",
     "db:seed": "dotenv -e .env -- tsx src/server/infra/database/seed.ts",
+    "db:seed:inventory": "dotenv -e .env -- tsx src/server/infra/database/seed-inventory.ts",
     "db:seed:prod": "dotenv -e .env.prod -- tsx src/server/infra/database/seed-prod.ts",
     "db:reset": "docker compose down -v && docker compose up -d"
   },
