@@ -117,7 +117,9 @@ export class InvitationService {
 
     if (existingUser) throw new UserEmailAlreadyExists();
 
-    const claimed = await this.invitationIRepository.claimForAcceptance(invitation.id);
+    const claimed = await this.invitationIRepository.claimForAcceptance(
+      invitation.id,
+    );
     if (!claimed) {
       throw new InvitationAlreadyAcceptedError();
     }

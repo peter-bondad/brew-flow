@@ -25,7 +25,7 @@ export function StatusCard({
               {title}
             </p>
 
-            <h3 className="mt-2 text-3xl font-bold text-[#3d2413] tracking-normal tabular-nums">
+            <h3 title={typeof value === "string" || typeof value === "number" ? String(value) : undefined} className="mt-2 text-2xl md:text-3xl font-bold text-[#3d2413] tracking-normal tabular-nums truncate">
               {value}
             </h3>
 
