@@ -36,7 +36,7 @@ export class OrderService {
       items: validatedItems,
     });
 
-    await this.deductInventory(order.id, validatedItems);
+    await this.deductInventory(order.id, userId, validatedItems);
 
     return order;
   }
@@ -172,6 +172,7 @@ export class OrderService {
 
   private async deductInventory(
     orderId: string,
+    userId: string,
     items: {
       productId: string;
       variantId: string;
@@ -190,7 +191,7 @@ export class OrderService {
           pi.ingredient.id,
           pi.quantityUsed * item.quantity,
           `Order ${orderId}`,
-          "system",
+          userId,
         );
       }
     }
