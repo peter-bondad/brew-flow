@@ -46,7 +46,7 @@ export default function MenuPage() {
 
       <div className="rounded-3xl bg-[linear-gradient(135deg,#4a2b1c_0%,#6e3d1f_45%,#c67e3f_100%)] p-6 text-[#fff9f2] shadow-lg">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold">Menu Management</h1>
+          <h1 className="text-3xl font-bold">Product Management</h1>
           <p className="max-w-2xl text-sm text-[#f6e7d4]">
             Manage menu items, categories, pricing, and availability across
             your coffee shop.
@@ -86,11 +86,11 @@ export default function MenuPage() {
           <div>
             <h2 className="flex items-center gap-2 text-lg font-semibold text-[#3d2413]">
               <Coffee className="h-5 w-5 text-[#8d5a2b]" />
-              Menu Items
+              Products
             </h2>
 
             <p className="mt-1 text-sm text-[#7b5f46]">
-              Browse and manage your coffee shop menu.
+              Browse and manage your coffee shop product catalog..
             </p>
           </div>
 

@@ -19,7 +19,7 @@ export function DashboardStats() {
       />
 
       <StatusCard
-        title="Menu Items"
+        title="Products"
         value="56"
         description="Currently available"
         icon={Coffee}

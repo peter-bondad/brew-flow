@@ -26,8 +26,8 @@ export const navigation: NavigationGroup[] = [
     title: "Operations",
     items: [
       {
-        title: "Menu",
-        href: "/admin/menu",
+        title: "Products",
+        href: "/admin/products",
         icon: CupSoda,
       },
       {

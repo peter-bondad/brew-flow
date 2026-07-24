@@ -1,7 +1,7 @@
-import { DashboardStats } from "./menu/components/overview/dashboard-stats";
-import { InventoryAlerts } from "./menu/components/overview/inventory-alerts";
-import { RecentOrders } from "./menu/components/overview/recent-orders";
-import { TopSellingItems } from "./menu/components/overview/top-selling-items";
+import { DashboardStats } from "./products/components/overview/dashboard-stats";
+import { InventoryAlerts } from "./products/components/overview/inventory-alerts";
+import { RecentOrders } from "./products/components/overview/recent-orders";
+import { TopSellingItems } from "./products/components/overview/top-selling-items";
 
 export default function DashboardPage() {
   return (

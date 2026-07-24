@@ -12,7 +12,7 @@
 
 ## About
 
-BrewFlow is a full-stack web app that centralizes inventory, products, menu management, point-of-sale (POS), employee administration, and business analytics for small and medium-sized coffee shops.
+BrewFlow is a full-stack platform that centralizes inventory, product management, point-of-sale (POS), employee administration, and business analytics for small and medium-sized coffee shops.
 
 It's a portfolio project exploring scalable architecture and end-to-end type safety, inspired by the number of independent coffee shops in **San Pablo City, Laguna** still running on spreadsheets and disconnected tools. The long-term goal is to make it usable by real local businesses.
 
@@ -22,15 +22,82 @@ Instead of treating each module as an isolated CRUD app, BrewFlow keeps inventor
 Inventory → Products & Variants → Menu → Point of Sale → Orders → Dashboard & Reports
 ```
 
+BrewFlow serves multiple clients from a single backend API:
+
+```text
+Web Admin Panel (Next.js)   →   Owner/Manager management console
+Mobile App (React Native)   →   Staff POS, ordering, and menu
+```
+
+---
+
+## Architecture
+
+### Consumers
+
+| Client | Tech | Primary Users | Purpose |
+|---|---|---|---|
+| **Web Admin** | Next.js App Router | Owner, Manager | Product management, inventory, users, invitations, suppliers, reports |
+| **Mobile App** | React Native | Staff, Manager, Owner | Menu catalog, order entry, order history, checkout |
+| **Backend API** | Hono + Next.js Route Handler | All clients | Auth, business logic, validation, database access |
+
+### Backend Structure
+
+Layered backend to keep HTTP, business logic, and infrastructure separate:
+
+```text
+Controller → Service → Repository Interface → Repository Implementation → Drizzle ORM → PostgreSQL
+```
+
+Business logic stays independent of the database, framework, and infrastructure via dependency injection and interface-driven design, following SOLID, Clean Architecture, and the Repository Pattern.
+
+```text
+src
+├── app
+│   ├── (guest)
+│   ├── (protected)
+│   │   └── admin
+│   │       └── products        ← Product management UI
+│   │       └── inventory
+│   │       └── invite
+│   │       └── settings
+│   │       └── page.tsx        ← Dashboard
+│   ├── api                     ← Backend API routes
+│   └── components
+├── lib
+│   ├── api                     ← Client API hooks (React Query)
+│   └── format.ts
+└── server
+    ├── container               ← Dependency injection
+    ├── errors
+    ├── features
+    │   ├── product
+    │   ├── inventory
+    │   ├── invitation
+    │   ├── user
+    │   └── order               ← Order service (in development)
+    ├── hono
+    ├── infra
+    │   └── database
+    │       └── schemas
+    ├── jobs
+    ├── middleware
+    └── shared
+        ├── product
+        ├── inventory
+        └── user-role.types.ts
+```
+
 ---
 
 ## Current Features
 
 **Authentication & Authorization**
 
-- Better Auth, session-based auth
+- Better Auth, session-based auth for web; token-based auth for mobile
 - Role-Based Access Control (RBAC) + permission-based guards
 - Protected routes (client and server-side)
+- Role enforcement by client type (admin vs mobile)
 
 **Invitation System**
 
@@ -66,7 +133,9 @@ Inventory → Products & Variants → Menu → Point of Sale → Orders → Dash
 
 ## Tech Stack
 
-**Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, Lucide React, Sonner
+**Frontend (Web Admin):** Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, Lucide React, Sonner, TanStack Query, TanStack Table
+
+**Mobile App (in development):** React Native, Expo, TanStack Query
 
 **Backend:** Hono, Better Auth, Drizzle ORM, PostgreSQL, Zod, Argon2
 
@@ -74,34 +143,26 @@ Inventory → Products & Variants → Menu → Point of Sale → Orders → Dash
 
 ---
 
-## Architecture
+## API Design
 
-Layered backend to keep HTTP, business logic, and infrastructure separate:
-
-```text
-Controller → Service → Repository Interface → Repository Implementation → Drizzle ORM → PostgreSQL
-```
-
-Business logic stays independent of the database, framework, and infrastructure via dependency injection and interface-driven design, following SOLID, Clean Architecture, and the Repository Pattern.
+Single backend serves both web admin and mobile app. Endpoints are grouped by concern and guarded by role:
 
 ```text
-src
-├── app
-│   ├── (guest)
-│   ├── (protected)
-│   ├── api
-│   └── components
-├── lib
-└── server
-    ├── container
-    ├── errors
-    ├── features
-    ├── hono
-    ├── infra
-    ├── jobs
-    ├── middleware
-    └── shared
+/api/auth/*                     → Public auth (login, refresh, logout)
+/api/products                   → Staff/mobile: active products only
+/api/orders                     → Staff/mobile: create orders, own history
+/api/admin/products             → Admin: full product CRUD
+/api/admin/inventory            → Admin: inventory management
+/api/admin/invitations          → Admin: invite lifecycle
+/api/admin/users                → Admin: user management
+/api/admin/orders               → Admin: order management and reporting
+/api/admin/suppliers            → Admin: supplier management
 ```
+
+**Auth by client:**
+- Web admin uses session cookies via Better Auth.
+- Mobile app uses short-lived access tokens + refresh tokens.
+- Same user database, same permission logic, different transport.
 
 ---
 
@@ -158,6 +219,7 @@ App runs at `http://localhost:3000`.
 | `pnpm build`           | Build the application                                    |
 | `pnpm start`           | Start the production server                              |
 | `pnpm lint`            | Run ESLint                                               |
+| `pnpm test`            | Run unit tests (Vitest)                                  |
 | `pnpm db:auth-gen`     | Generate Better Auth schema from `src/lib/auth.ts`       |
 | `pnpm db:generate`     | Generate Drizzle migrations                              |
 | `pnpm db:migrate`      | Apply database migrations                                |
@@ -174,15 +236,23 @@ App runs at `http://localhost:3000`.
 
 ## Roadmap
 
-- **Product Management** — CRUD, categories, images, variants (sizes/SKU), status
+**Core Platform**
+- **Products** — CRUD, categories, images, variants (sizes/SKU), status (admin)
 - **Inventory** — stock management, adjustments, transaction history/audit trail, low stock detection
-- **Menu** — categories, availability, search & filtering
-- **POS** — cart, checkout, discounts, receipts, payment processing, inventory deduction on order completion
+- **Orders** — mobile order entry, checkout, order history, inventory deduction
 - **Dashboard** — revenue overview, sales & inventory analytics, best sellers, recent orders
-- **Employee Management** — accounts, roles, permissions, activity logs
-- **Customer Management** — profiles, purchase history, loyalty program
-- **Reporting** — sales/inventory reports, PDF & Excel export
-- **Notifications** — low stock digest emails (Resend, scheduled job), daily summaries
+
+**Mobile App (React Native)**
+- Menu catalog and product browsing
+- Cart, checkout, and payment processing
+- Order history and status tracking
+- Push notifications for new orders
+
+**Admin Panel Enhancements**
+- User management and role assignment
+- Invitation system with email delivery
+- Supplier management and purchase orders
+- Reports and analytics with export
 
 ### Future / Exploratory
 
@@ -196,7 +266,7 @@ App runs at `http://localhost:3000`.
 
 ## Security
 
-- Better Auth session authentication
+- Better Auth session authentication (web) and token authentication (mobile)
 - RBAC + permission-based authorization
 - Secure invitation tokens (SHA-256 hashed)
 - Argon2 password hashing
@@ -223,7 +293,7 @@ pnpm db:seed:prod      # seed initial administrator account
 **Peter Maironne L. Bondad**
 Software Engineer
 
-GitHub: https://github.com/peter-bondad
+GitHub: https://github.com/peter-bondad/brew-flow
 
 ---
 

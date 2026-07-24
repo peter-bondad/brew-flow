@@ -1,6 +1,6 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { requireSession } from "@/server/auth/require-session";
-import { AppSidebar } from "./admin/menu/components/appsidebar";
+import { AppSidebar } from "./admin/products/components/appsidebar";
 import { SessionProvider } from "@/components/providers/session-provider";
 
 export default async function ProtectedLayout({
