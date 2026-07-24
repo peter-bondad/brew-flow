@@ -74,9 +74,12 @@ export class InvitationService {
 
     const invitationUrl = createInvitationUrl(invitationToken);
 
-    // Send the actual email with the accept link.
+    const fullName = [input.firstName, input.middleName, input.lastName]
+      .filter(Boolean)
+      .join(" ");
+
     await this.emailService.sendInvitation({
-      name: `${input.firstName} ${input.middleName} ${input.lastName}`,
+      name: fullName,
       email: input.email,
       invitationUrl,
       expiresAt: invitationExpire,
@@ -114,6 +117,11 @@ export class InvitationService {
 
     if (existingUser) throw new UserEmailAlreadyExists();
 
+    const claimed = await this.invitationIRepository.claimForAcceptance(invitation.id);
+    if (!claimed) {
+      throw new InvitationAlreadyAcceptedError();
+    }
+
     let createdUser;
 
     try {
@@ -136,36 +144,18 @@ export class InvitationService {
         },
       });
     } catch (err) {
-      // If account creation itself fails, nothing else has happened yet —
-      // safe to just log and bubble up, no cleanup needed.
       console.error("[acceptInvitation] createUser failed", err);
       throw err;
     }
 
-    // The invite link is our proof this person owns the email — so mark it
-    // verified now instead of making them click a separate verification email.
-    const verified = await this.userIRepository.updateEmailVerified(
-      createdUser.user.id,
-    );
-
-    if (!verified) {
-      // Shouldn't normally happen right after creating the user — log it so
-      // it's noticeable if it ever does.
-      console.error("[acceptInvitation] failed to mark email verified", {
-        userId: createdUser.user.id,
-      });
-    }
+    await this.userIRepository.updateEmailVerified(createdUser.user.id);
 
     try {
-      // Close out the invite so it can't be used again.
       await this.invitationIRepository.markAccepted({
         invitationId: invitation.id,
         usedBy: createdUser.user.id,
       });
     } catch (err) {
-      // Worst case in this flow: the account now exists, but the invite
-      // still looks "pending." Logged loudly on purpose — this is the one
-      // gap we haven't fully closed yet (see notes on idempotent resume).
       console.error(
         "[acceptInvitation] markAccepted failed after user was created",
         { invitationId: invitation.id, userId: createdUser.user.id, err },
