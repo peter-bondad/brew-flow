@@ -113,26 +113,22 @@ export default function InventoryPage() {
         onAddIngredient={() => setEditingIngredient({} as Ingredient)}
       />
 
-      <div className="rounded-xl border border-[#ead8c3] bg-card shadow-sm">
-        <div className="px-6 pb-6">
-          <InventoryTable
-            data={ingredients}
-            loading={isPending}
-            error={error ? { message: error.message } : undefined}
-            page={page}
-            onPageChange={setPage}
-            limit={LIMIT}
-            sorting={sorting}
-            onSortingChange={setSorting}
-            onEdit={setEditingIngredient}
-            onRestock={setRestockingIngredient}
-            onAdjustStock={setAdjustingIngredient}
-            onViewHistory={(ingredient) => {
-              console.log("History", ingredient);
-            }}
-          />
-        </div>
-      </div>
+      <InventoryTable
+        data={ingredients}
+        loading={isPending}
+        error={error ? { message: error.message } : undefined}
+        page={page}
+        onPageChange={setPage}
+        limit={LIMIT}
+        sorting={sorting}
+        onSortingChange={setSorting}
+        onEdit={setEditingIngredient}
+        onRestock={setRestockingIngredient}
+        onAdjustStock={setAdjustingIngredient}
+        onViewHistory={(ingredient) => {
+          console.log("History", ingredient);
+        }}
+      />
 
       <IngredientFormDialog
         open={!!editingIngredient}
