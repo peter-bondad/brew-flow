@@ -1,4 +1,4 @@
-import { InventoryTransactionType, InventoryUnit } from "./inventory.constant";
+import { InventoryUnit, InventoryTransactionType } from "./inventory.constant";
 
 export interface Ingredient {
   id: string;
@@ -6,9 +6,9 @@ export interface Ingredient {
   sku: string | null;
   unit: InventoryUnit;
   currentStock: number;
-  reorderThreshold: number;
-  reorderQuantity: number;
-  unitCost: number;
+  minimumStockLevel: number;
+  restockQuantity: number;
+  averageUnitCost: number;
   supplierId: string | null;
   isActive: boolean;
   createdAt: Date;
@@ -32,9 +32,9 @@ export interface CreateIngredientData {
   name: string;
   sku?: string;
   unit: InventoryUnit;
-  reorderThreshold: number;
-  reorderQuantity: number;
-  unitCost: number;
+  minimumStockLevel: number;
+  restockQuantity: number;
+  averageUnitCost: number;
   supplierId?: string;
 }
 
@@ -44,7 +44,7 @@ export interface UpdateIngredientData {
   unit?: InventoryUnit;
   reorderThreshold?: number;
   reorderQuantity?: number;
-  unitCost?: number;
+  averageUnitCost?: number;
   supplierId?: string | null;
 }
 
@@ -62,8 +62,10 @@ export interface ApplyStockChangeInput {
   quantityChange: number;
   note?: string;
   createdBy: string;
-  orderId?: string; // reserved for the future order-completion (sale_deduction) flow
-  unitCost?: number; // only used by restock, to refresh cost basis in the same transaction
+  orderId?: string;
+
+  // Optional: refresh inventory cost basis after a restock
+  averageUnitCost?: number;
 }
 
 export interface ListTransactionsFilter {

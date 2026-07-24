@@ -29,11 +29,11 @@ export const ingredients = pgTable(
 
     currentStock: integer("current_stock").notNull().default(0),
 
-    reorderThreshold: integer("reorder_threshold").notNull().default(0),
+    minimumStockLevel: integer("minimum_stock_level").notNull().default(0),
 
-    reorderQuantity: integer("reorder_quantity").notNull().default(0),
+    restockQuantity: integer("restock_quantity").notNull().default(0),
 
-    unitCost: integer("unit_cost").notNull().default(0),
+    averageUnitCost: integer("average_unit_cost").notNull().default(0),
 
     supplierId: text("supplier_id").references(() => suppliers.id, {
       onDelete: "set null",

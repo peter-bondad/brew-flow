@@ -9,7 +9,7 @@ import {
   listTransactionsQueryRequest,
   restockIngredientRequest,
   updateIngredientRequest,
-} from "./inventory.dto";
+} from "../../shared/inventory/inventory.dto";
 
 export const listIngredientsController = factory.createHandlers(
   validator("query", listIngredientsQueryRequest),

@@ -16,7 +16,7 @@ import type {
   ListIngredientsFilter,
   ListTransactionsFilter,
   UpdateIngredientData,
-} from "./inventory.interface";
+} from "../../shared/inventory/inventory.interface";
 
 export class InventoryRepository implements IInventoryRepository {
   constructor(private readonly database = db) {}
@@ -42,7 +42,7 @@ export class InventoryRepository implements IInventoryRepository {
     if (filter.lowStockOnly) {
       // "low stock" = current stock has dropped to or below the reorder point
       conditions.push(
-        sql`${ingredients.currentStock} <= ${ingredients.reorderThreshold}`,
+        sql`${ingredients.currentStock} <= ${ingredients.restockQuantity}`,
       );
     }
 
@@ -74,9 +74,9 @@ export class InventoryRepository implements IInventoryRepository {
         name: data.name,
         sku: data.sku,
         unit: data.unit,
-        reorderThreshold: data.reorderThreshold,
-        reorderQuantity: data.reorderQuantity,
-        unitCost: data.unitCost,
+        minimumStockLevel: data.minimumStockLevel,
+        restockQuantity: data.restockQuantity,
+        averageUnitCost: data.averageUnitCost,
         supplierId: data.supplierId,
       })
       .returning();
@@ -117,7 +117,9 @@ export class InventoryRepository implements IInventoryRepository {
         .update(ingredients)
         .set({
           currentStock: sql`${ingredients.currentStock} + ${input.quantityChange}`,
-          ...(input.unitCost !== undefined ? { unitCost: input.unitCost } : {}),
+          ...(input.averageUnitCost !== undefined
+            ? { averageUnitCost: input.averageUnitCost }
+            : {}),
           updatedAt: new Date(),
         })
         .where(

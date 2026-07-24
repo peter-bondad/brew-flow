@@ -7,8 +7,8 @@ import type {
   IInventoryRepository,
   Ingredient,
   InventoryTransaction,
-} from "./inventory.interface";
-import { inventoryTransactionType } from "./inventory.constant";
+} from "../../shared/inventory/inventory.interface";
+import { inventoryTransactionType } from "../../shared/inventory/inventory.constant";
 import {
   AdjustIngredientStockRequest,
   CreateIngredientRequest,
@@ -16,7 +16,7 @@ import {
   ListTransactionsQueryRequest,
   RestockIngredientRequest,
   UpdateIngredientRequest,
-} from "./inventory.dto";
+} from "../../shared/inventory/inventory.dto";
 
 export class InventoryService {
   constructor(private readonly inventoryRepository: IInventoryRepository) {}
@@ -123,7 +123,7 @@ export class InventoryService {
       type: inventoryTransactionType.Restock,
       quantityChange: input.quantity,
       note: input.note,
-      unitCost: input.unitCost,
+      averageUnitCost: input.averageUnitCost,
       createdBy: userId,
     });
 

@@ -17,9 +17,9 @@ export const createIngredientRequest = z
     name: z.string().trim().min(1).max(150),
     sku: z.string().trim().min(1).max(60).optional(),
     unit: z.enum(inventoryUnit),
-    reorderThreshold: z.number().int().min(0).default(0),
-    reorderQuantity: z.number().int().min(0).default(0),
-    unitCost: z.number().int().min(0).default(0), // cents per unit
+    minimumStockLevel: z.number().int().min(0).default(0),
+    restockQuantity: z.number().int().min(0).default(0),
+    averageUnitCost: z.number().int().min(0).default(0), // cents per unit
     supplierId: z.string().trim().min(1).optional(),
   })
   .strict();
@@ -31,9 +31,9 @@ export const updateIngredientRequest = z
     name: z.string().trim().min(1).max(150).optional(),
     sku: z.string().trim().min(1).max(60).optional(),
     unit: z.enum(inventoryUnit).optional(),
-    reorderThreshold: z.number().int().min(0).optional(),
-    reorderQuantity: z.number().int().min(0).optional(),
-    unitCost: z.number().int().min(0).optional(),
+    minimumStockLevel: z.number().int().min(0).default(0),
+    restockQuantity: z.number().int().min(0).default(0),
+    averageUnitCost: z.number().int().min(0).default(0),
     supplierId: z.string().trim().min(1).nullable().optional(),
   })
   .strict()
@@ -46,7 +46,7 @@ export type UpdateIngredientRequest = z.infer<typeof updateIngredientRequest>;
 export const restockIngredientRequest = z
   .object({
     quantity: z.number().int().positive(),
-    unitCost: z.number().int().min(0).optional(), // update cost basis if the new batch price changed
+    averageUnitCost: z.number().int().min(0).optional(), // update cost basis if the new batch price changed
     note: z.string().trim().max(500).optional(),
   })
   .strict();
